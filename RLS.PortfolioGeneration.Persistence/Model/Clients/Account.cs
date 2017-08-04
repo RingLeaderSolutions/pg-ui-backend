@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RLS.PortfolioGeneration.Persistence.Model
+namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 {
     [Table("account")]
     public class Account
@@ -27,6 +27,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
 
         public string CreditRating { get; set; }
 
-        public virtual ICollection<Site> Sites { get; set; }
+        public virtual ICollection<TenancyPeriod> TenancyPeriods { get; set; }
     }
 }

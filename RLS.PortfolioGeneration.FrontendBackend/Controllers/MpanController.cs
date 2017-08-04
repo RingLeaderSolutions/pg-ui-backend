@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RLS.PortfolioGeneration.Persistence.Model;
+using RLS.PortfolioGeneration.Persistence.Model.Clients;
+using RLS.PortfolioGeneration.FrontendBackend.Dtos;
 
 namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 {
@@ -22,6 +26,13 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             return await _dbContext.RetrieveAllMpans();
         }
 
+        [HttpGet("portfolio/{portfolioId}")]
+        public async Task<IEnumerable<MpanDto>> GetByPortfolio(string portfolioId)
+        {
+            return (await _dbContext.RetrieveMpansByPortfolio(portfolioId))
+                .Select(Mapper.Map<MpanDto>);
+        }
+
         [HttpGet("{id}")]
         public async Task<Mpan> Get(Guid id)
         {
@@ -29,7 +40,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpPost]
-        public async void Post([FromBody]Mpan mpan)
+        public async Task Post([FromBody]Mpan mpan)
         {
             await _dbContext.Add(mpan);
         }

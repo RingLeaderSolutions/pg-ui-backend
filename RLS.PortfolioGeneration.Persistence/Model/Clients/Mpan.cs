@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RLS.PortfolioGeneration.Persistence.Model
+namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 {
     [Table("mpan")]
     public class Mpan
@@ -10,7 +10,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         [Key, Column("Id")]
         public Guid Id { get; set; }
 
-
+        [Required]
         public string MpanCore { get; set; }
 
         public string EnergisationStatus { get; set; }

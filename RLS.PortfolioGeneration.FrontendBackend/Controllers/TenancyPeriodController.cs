@@ -8,43 +8,43 @@ using RLS.PortfolioGeneration.Persistence.Model.Clients;
 namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 {
     [Route("api/[controller]")]
-    public class SiteController : Controller
+    public class TenancyPeriodController : Controller
     {
         private readonly ModelDbContext _dbContext;
 
-        public SiteController(ModelDbContext dbContext)
+        public TenancyPeriodController(ModelDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Site>> Get()
+        public async Task<IEnumerable<TenancyPeriod>> Get()
         {
-            return await _dbContext.RetrieveAllSites();
+            return await _dbContext.RetrieveAllTenancyPeriods();
         }
 
         [HttpGet("{id}")]
-        public async Task<Site> Get(Guid id)
+        public async Task<TenancyPeriod> Get(Guid id)
         {
-            return await _dbContext.RetrieveSiteById(id);
+            return await _dbContext.RetrieveTenacyPeriodById(id);
         }
 
         [HttpPost]
-        public async Task Post([FromBody]Site site)
+        public async Task Post([FromBody]TenancyPeriod mpan)
         {
-            await _dbContext.Add(site);
+            await _dbContext.Add(mpan);
         }
 
         [HttpPut("{id}")]
-        public async Task Put(Guid id, [FromBody]Site site)
+        public async Task Put(Guid id, [FromBody]TenancyPeriod tenancyPeriod)
         {
-            await _dbContext.Update(site);
+            await _dbContext.Update(tenancyPeriod);
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(Guid id)
         {
-            await _dbContext.DeleteSite(id);
+            await _dbContext.DeleteTenancyPeriod(id);
         }
     }
 }

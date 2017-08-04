@@ -11,6 +11,9 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
             migrationBuilder.EnsureSchema(
                 name: "clients");
 
+            migrationBuilder.EnsureSchema(
+                name: "pricing");
+
             migrationBuilder.CreateTable(
                 name: "account",
                 schema: "clients",
@@ -37,7 +40,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    AccountId = table.Column<Guid>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     Capacity = table.Column<decimal>(nullable: false),
                     CoT = table.Column<string>(nullable: true),
@@ -47,14 +49,9 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_site", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_site_account_AccountId",
-                        column: x => x.AccountId,
-                        principalSchema: "clients",
-                        principalTable: "account",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
+
+            ;
 
             migrationBuilder.CreateTable(
                 name: "mpan",
@@ -66,7 +63,7 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     DataCollectorMpid = table.Column<string>(nullable: true),
                     EnergisationStatus = table.Column<string>(nullable: true),
                     MeterOperatorMpid = table.Column<string>(nullable: true),
-                    MpanCore = table.Column<string>(nullable: true),
+                    MpanCore = table.Column<string>(nullable: false),
                     SiteId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -81,6 +78,37 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "tenancy_period",
+                schema: "clients",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(nullable: false),
+                    AccountId = table.Column<Guid>(nullable: false),
+                    EffectiveFrom = table.Column<DateTime>(nullable: false),
+                    EffectiveTo = table.Column<DateTime>(nullable: false),
+                    SiteId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tenancy_period", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_tenancy_period_account_AccountId",
+                        column: x => x.AccountId,
+                        principalSchema: "clients",
+                        principalTable: "account",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tenancy_period_site_SiteId",
+                        column: x => x.SiteId,
+                        principalSchema: "clients",
+                        principalTable: "site",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+
             migrationBuilder.CreateIndex(
                 name: "IX_mpan_SiteId",
                 schema: "clients",
@@ -88,10 +116,22 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 column: "SiteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_site_AccountId",
+                name: "IX_tenancy_period_AccountId",
                 schema: "clients",
-                table: "site",
+                table: "tenancy_period",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tenancy_period_SiteId",
+                schema: "clients",
+                table: "tenancy_period",
+                column: "SiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_portfolio_mpan_portfolioId",
+                schema: "pricing",
+                table: "portfolio_mpan",
+                column: "portfolioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -101,12 +141,24 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 schema: "clients");
 
             migrationBuilder.DropTable(
-                name: "site",
+                name: "tenancy_period",
                 schema: "clients");
+
+            migrationBuilder.DropTable(
+                name: "portfolio_mpan",
+                schema: "pricing");
 
             migrationBuilder.DropTable(
                 name: "account",
                 schema: "clients");
+
+            migrationBuilder.DropTable(
+                name: "site",
+                schema: "clients");
+
+            migrationBuilder.DropTable(
+                name: "portfolio",
+                schema: "pricing");
         }
     }
 }

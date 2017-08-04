@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RLS.PortfolioGeneration.Persistence.Model.Clients;
 
 namespace RLS.PortfolioGeneration.Persistence.Model
 {
@@ -48,7 +49,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         {
             return Accounts
                 .AsQueryable()
-                //.Include(a => a.Sites)
                 .AsNoTracking();
         }
     }

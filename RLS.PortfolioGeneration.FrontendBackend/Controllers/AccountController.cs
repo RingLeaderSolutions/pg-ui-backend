@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RLS.PortfolioGeneration.Persistence.Model;
+using RLS.PortfolioGeneration.Persistence.Model.Clients;
 
 
 namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
