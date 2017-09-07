@@ -27,10 +27,15 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpGet("portfolio/{portfolioId}")]
-        public async Task<IEnumerable<MpanDto>> GetByPortfolio(string portfolioId)
+        public async Task<MpansDto> GetByPortfolio(string portfolioId)
         {
-            return (await _dbContext.RetrieveMpansByPortfolio(portfolioId))
-                .Select(Mapper.Map<MpanDto>);
+            var mpans = (await _dbContext.RetrieveMpansByPortfolio(portfolioId))
+                .Select(Mapper.Map<MpanDto>).ToList();
+            
+            return new MpansDto
+            {
+                Mpans = mpans
+            };
         }
 
         [HttpGet("{id}")]
