@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,17 @@ namespace RLS.PortfolioGeneration.Persistence.Model
     {
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<PortfolioMpan> PortfolioMpans { get; set; }
+
+        public async Task<Portfolio> RetrievePortfolioById(string id)
+        {
+            return
+                await RetrievePortfolios().SingleOrDefaultAsync(a => a.Id == id);
+        }
+
+        private IQueryable<Portfolio> RetrievePortfolios()
+        {
+            return Portfolios.AsQueryable().AsNoTracking();
+        }
 
         public async Task<List<Mpan>> RetrieveMpansByPortfolio(string portfolioId)
         {
