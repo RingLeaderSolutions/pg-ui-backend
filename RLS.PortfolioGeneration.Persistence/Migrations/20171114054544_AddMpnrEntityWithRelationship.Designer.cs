@@ -11,9 +11,10 @@ using System;
 namespace RLS.PortfolioGeneration.Persistence.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    partial class ModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171114054544_AddMpnrEntityWithRelationship")]
+    partial class AddMpnrEntityWithRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

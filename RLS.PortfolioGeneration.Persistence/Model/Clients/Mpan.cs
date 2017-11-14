@@ -13,13 +13,27 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
         [Required]
         public string MpanCore { get; set; }
 
-        public string EnergisationStatus { get; set; }
+        public string MeterType { get; set; }
 
-        public string MeterOperatorMpid { get; set; }
+        public string MeterTimeSwitchCode { get; set; }
 
-        public string DataAggregatorMpid { get; set; }
+        public string LLF { get; set; }
 
-        public string DataCollectorMpid { get; set; }
+        public string ProfileClass { get; set; }
+
+        public string RetrievalMethod { get; set; }
+
+        public string GSPGroup { get; set; }
+
+        public string MeasurementClass { get; set; }
+
+        public bool IsEnergized { get; set; }
+
+        public string MOAgent { get; set; }
+
+        public string DAAgent { get; set; }
+
+        public string DCAgent { get; set; }
 
         public virtual Site Site { get; set; }
     }
