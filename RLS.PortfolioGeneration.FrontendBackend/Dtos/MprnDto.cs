@@ -1,17 +1,14 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace RLS.PortfolioGeneration.Persistence.Model.Clients
+namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
-    [Table("mpnr")]
-    public class Mpnr
+    public class MprnDto
     {
-        [Key, Column("Id")]
         public Guid Id { get; set; }
 
-        [Required]
-        public string MpnrCore { get; set; }
+        public string MprnCore { get; set; }
 
         public string SerialNumber { get; set; }
 
@@ -27,6 +24,12 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string Size { get; set; }
 
-        public virtual Site Site { get; set; }
+        public virtual SiteDto Site { get; set; }
+    }
+
+    public class MprnsDto
+    {
+        [JsonProperty("mprns")]
+        public List<MprnDto> Mprns { get; set; }
     }
 }

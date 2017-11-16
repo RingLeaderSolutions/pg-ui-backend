@@ -9,45 +9,44 @@ namespace RLS.PortfolioGeneration.Persistence.Model
 {
     public partial class ModelDbContext
     {
-        public DbSet<Mpnr> Mpnrs { get; set; }
-
-
-        public async Task<List<Mpnr>> RetrieveAllMpnrs()
+        public DbSet<Mprn> Mprns { get; set; }
+        
+        public async Task<List<Mprn>> RetrieveAllMprns()
         {
             return
-                await RetrieveMpnrs()
+                await RetrieveMprns()
                     .ToListAsync();
         }
 
-        public async Task<Mpnr> RetrieveMpnrById(Guid id)
+        public async Task<Mprn> RetrieveMprnById(Guid id)
         {
             return
-                await RetrieveMpnrs().SingleOrDefaultAsync(a => a.Id == id);
+                await RetrieveMprns().SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task Add(Mpnr mpnr)
+        public async Task Add(Mprn mprn)
         {
-            Mpnrs.Add(mpnr);
+            Mprns.Add(mprn);
             await SaveChangesAsync();
         }
 
-        public async Task Update(Mpnr mpnr)
+        public async Task Update(Mprn mprn)
         {
-            Mpnrs.Attach(mpnr);
+            Mprns.Attach(mprn);
             await SaveChangesAsync();
         }
 
-        public async Task DeleteMpnr(Guid id)
+        public async Task DeleteMprn(Guid id)
         {
-            var mpnr = new Mpnr { Id = id };
-            Mpnrs.Attach(mpnr);
-            Mpnrs.Remove(mpnr);
+            var mprn = new Mprn { Id = id };
+            Mprns.Attach(mprn);
+            Mprns.Remove(mprn);
             await SaveChangesAsync();
         }
 
-        private IQueryable<Mpnr> RetrieveMpnrs()
+        private IQueryable<Mprn> RetrieveMprns()
         {
-            return Mpnrs
+            return Mprns
                 .AsQueryable()
                 .AsNoTracking();
         }

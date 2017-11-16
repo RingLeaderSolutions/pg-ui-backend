@@ -105,7 +105,7 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<string>("Model");
 
-                    b.Property<string>("MpnrCore")
+                    b.Property<string>("MprnCore")
                         .IsRequired();
 
                     b.Property<string>("SerialNumber");

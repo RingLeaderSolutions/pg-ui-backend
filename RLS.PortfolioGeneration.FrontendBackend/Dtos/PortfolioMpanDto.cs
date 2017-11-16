@@ -7,7 +7,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
     {
         public string Id { get; set; }
 
-        public string MpanCore { get; set; }
+        public string MeterNumber { get; set; }
+
+        public string MeterType { get; set; }
 
         public DateTime? EffectiveFrom { get; set; }
 

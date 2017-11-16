@@ -11,9 +11,10 @@ using System;
 namespace RLS.PortfolioGeneration.Persistence.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    partial class ModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171116210737_RenameToMprnAndUpdateDependentSchemas")]
+    partial class RenameToMprnAndUpdateDependentSchemas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,10 +182,10 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.ToTable("portfolio","pricing");
                 });
 
-            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Pricing.PortfolioMeter", b =>
+            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Pricing.PortfolioMpan", b =>
                 {
-                    b.Property<string>("MeterNumber")
-                        .HasColumnName("meterNumber");
+                    b.Property<string>("MpanCore")
+                        .HasColumnName("mpanCore");
 
                     b.Property<DateTime?>("EffectiveFrom")
                         .HasColumnName("effectiveFrom");
@@ -196,18 +197,15 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                         .IsRequired()
                         .HasColumnName("id");
 
-                    b.Property<string>("MeterType")
-                        .HasColumnName("meterType");
-
                     b.Property<string>("portfolioId");
 
-                    b.HasKey("MeterNumber", "EffectiveFrom", "EffectiveTo");
+                    b.HasKey("MpanCore", "EffectiveFrom", "EffectiveTo");
 
-                    b.HasAlternateKey("Id", "MeterNumber");
+                    b.HasAlternateKey("Id", "MpanCore");
 
                     b.HasIndex("portfolioId");
 
-                    b.ToTable("portfolio_meter","pricing");
+                    b.ToTable("portfolio_mpan","pricing");
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.Mpan", b =>
@@ -237,10 +235,10 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Pricing.PortfolioMeter", b =>
+            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Pricing.PortfolioMpan", b =>
                 {
                     b.HasOne("RLS.PortfolioGeneration.Persistence.Model.Pricing.Portfolio", "Portfolio")
-                        .WithMany("PortfolioMeters")
+                        .WithMany("PortfolioMpans")
                         .HasForeignKey("portfolioId");
                 });
 #pragma warning restore 612, 618

@@ -25,6 +25,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public virtual ICollection<Mpan> Mpans { get; set; }
 
-        public virtual ICollection<Mpnr> Mpnrs { get; set; }
+        public virtual ICollection<Mprn> Mprns { get; set; }
     }
 }

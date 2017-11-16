@@ -17,6 +17,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Pricing
         [Column("contractEnd")]
         public DateTime? ContractEnd { get; set; }
 
-        public virtual ICollection<PortfolioMpan> PortfolioMpans { get; set; }
+        public virtual ICollection<PortfolioMeter> PortfolioMeters { get; set; }
     }
 }
