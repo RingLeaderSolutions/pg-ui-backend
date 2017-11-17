@@ -24,5 +24,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
         public virtual ICollection<TenancyPeriod> TenancyPeriods { get; set; }
 
         public virtual ICollection<Mpan> Mpans { get; set; }
+
+        public virtual ICollection<Mprn> Mprns { get; set; }
     }
 }

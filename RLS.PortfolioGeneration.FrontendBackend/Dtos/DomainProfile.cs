@@ -12,9 +12,10 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
             CreateMap<TenancyPeriod, TenancyPeriodDto>();
             CreateMap<Site, SiteDto>();
             CreateMap<Mpan, MpanDto>();
+            CreateMap<Mprn, MprnDto>();
 
             CreateMap<Portfolio, PortfolioDto>();
-            CreateMap<PortfolioMpan, PortfolioMpanDto>();
+            CreateMap<PortfolioMeter, PortfolioMeterDto>();
         }
     }
 }

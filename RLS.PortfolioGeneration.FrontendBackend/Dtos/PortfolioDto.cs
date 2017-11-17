@@ -11,6 +11,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public DateTime? ContractEnd { get; set; }
 
-        public virtual List<PortfolioMpanDto> PortfolioMpans { get; set; }
+        public virtual List<PortfolioMeterDto> PortfolioMeters { get; set; }
     }
 }

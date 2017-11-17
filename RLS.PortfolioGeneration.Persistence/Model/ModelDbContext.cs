@@ -26,14 +26,18 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 .HasOne(s => s.Site)
                 .WithMany(s => s.Mpans);
 
+            modelBuilder.Entity<Mprn>()
+                .HasOne(s => s.Site)
+                .WithMany(s => s.Mprns);
+
             modelBuilder.Entity<Portfolio>();
 
-            modelBuilder.Entity<PortfolioMpan>()
-                .HasKey(k => new { k.MpanCore, k.EffectiveFrom, k.EffectiveTo });
+            modelBuilder.Entity<PortfolioMeter>()
+                .HasKey(k => new { k.MeterNumber, k.EffectiveFrom, k.EffectiveTo });
 
-            modelBuilder.Entity<PortfolioMpan>()
+            modelBuilder.Entity<PortfolioMeter>()
                 .HasOne(pm=> pm.Portfolio)
-                .WithMany(p => p.PortfolioMpans);
+                .WithMany(p => p.PortfolioMeters);
         }
 
 
