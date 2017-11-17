@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
-    public class PortfolioMpanDto
+    public class PortfolioMeterDto
     {
         public string Id { get; set; }
 

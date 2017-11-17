@@ -15,7 +15,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
             CreateMap<Mprn, MprnDto>();
 
             CreateMap<Portfolio, PortfolioDto>();
-            CreateMap<PortfolioMeter, PortfolioMpanDto>();
+            CreateMap<PortfolioMeter, PortfolioMeterDto>();
         }
     }
 }
