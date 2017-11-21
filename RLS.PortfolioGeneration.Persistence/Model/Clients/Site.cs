@@ -15,8 +15,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string Contact { get; set; }
 
-        public decimal Capacity { get; set; }
-
         public string Address { get; set; }
 
         public string CoT { get; set; }
