@@ -21,9 +21,12 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Mpan>> Get()
+        public async Task<List<MpanDto>> Get()
         {
-            return await _dbContext.RetrieveAllMpans();
+            var mpans = await _dbContext.RetrieveAllMpans();
+
+            return mpans.Select(Mapper.Map<MpanDto>)
+                .ToList();
         }
 
         [HttpGet("portfolio/{portfolioId}")]
@@ -39,20 +42,32 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Mpan> Get(Guid id)
+        public async Task<MpanDto> Get(Guid id)
         {
-            return await _dbContext.RetrieveMpanById(id);
+            var mpan = await _dbContext.RetrieveMpanById(id);
+
+            return Mapper.Map<MpanDto>(mpan);
         }
 
         [HttpPost]
-        public async Task Post([FromBody]Mpan mpan)
+        public async Task<CreatedResult> Post([FromBody]MpanDto mpanDto)
         {
+            var mpan = Mapper.Map<Mpan>(mpanDto);
+
+            var mpanId = Guid.NewGuid();
+            mpan.Id = mpanId;
+            
             await _dbContext.Add(mpan);
+
+            return Created(new Uri($"/api/Mpan/{mpanId}", UriKind.Relative), new { id = mpanId });
         }
 
         [HttpPut("{id}")]
-        public async Task Put(Guid id, [FromBody]Mpan mpan)
+        public async Task Put(Guid id, [FromBody]MpanDto mpanDto)
         {
+            var mpan = Mapper.Map<Mpan>(mpanDto);
+            mpan.Id = id;
+
             await _dbContext.Update(mpan);
         }
 

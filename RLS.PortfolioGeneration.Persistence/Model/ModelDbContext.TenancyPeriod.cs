@@ -10,8 +10,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model
     public partial class ModelDbContext
     {
         public DbSet<TenancyPeriod> TenancyPeriods { get; set; }
-
-
+        
         public async Task<List<TenancyPeriod>> RetrieveAllTenancyPeriods()
         {
             return
@@ -22,7 +21,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task<TenancyPeriod> RetrieveTenacyPeriodById(Guid id)
         {
             return
-                await RetrieveTenancyPeriods().SingleOrDefaultAsync(a => a.Id == id);
+                await RetrieveTenancyPeriods()
+                .SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task Add(TenancyPeriod tenancyPeriod)
@@ -34,7 +34,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task Update(TenancyPeriod tenancyPeriod)
         {
             TenancyPeriods.Attach(tenancyPeriod);
-            TenancyPeriods.Attach(tenancyPeriod);
+
+            var entry = Entry(tenancyPeriod);
+            entry.State = EntityState.Modified;
+
             await SaveChangesAsync();
         }
 

@@ -9,10 +9,19 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public DomainProfile()
         {
             CreateMap<Account, AccountDto>();
+            CreateMap<AccountDto, Account>();
+
             CreateMap<TenancyPeriod, TenancyPeriodDto>();
+            CreateMap<TenancyPeriodDto, TenancyPeriod>();
+
             CreateMap<Site, SiteDto>();
+            CreateMap<SiteDto, Site>();
+
             CreateMap<Mpan, MpanDto>();
+            CreateMap<MpanDto, Mpan>();
+
             CreateMap<Mprn, MprnDto>();
+            CreateMap<MprnDto, Mprn>();
 
             CreateMap<Portfolio, PortfolioDto>();
             CreateMap<PortfolioMeter, PortfolioMeterDto>();
