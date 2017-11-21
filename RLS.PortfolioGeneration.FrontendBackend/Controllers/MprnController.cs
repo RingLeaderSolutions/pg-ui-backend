@@ -21,9 +21,12 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Mprn>> Get()
+        public async Task<List<MprnDto>> Get()
         {
-            return await _dbContext.RetrieveAllMprns();
+            var mprns = await _dbContext.RetrieveAllMprns();
+
+            return mprns.Select(Mapper.Map<MprnDto>)
+                .ToList();
         }
 
         [HttpGet("portfolio/{portfolioId}")]
@@ -39,21 +42,33 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Mprn> Get(Guid id)
+        public async Task<MprnDto> Get(Guid id)
         {
-            return await _dbContext.RetrieveMprnById(id);
+            var mprn = await _dbContext.RetrieveMprnById(id);
+
+            return Mapper.Map<MprnDto>(mprn);
         }
 
         [HttpPost]
-        public async Task Post([FromBody]Mprn mpan)
+        public async Task<CreatedResult> Post([FromBody]MprnDto mprnDto)
         {
-            await _dbContext.Add(mpan);
+            var mprn = Mapper.Map<Mprn>(mprnDto);
+
+            var mprnId = Guid.NewGuid();
+            mprn.Id = mprnId;
+
+            await _dbContext.Add(mprn);
+
+            return Created(new Uri($"/api/Mprn/{mprnId}", UriKind.Relative), new { id = mprnId });
         }
 
         [HttpPut("{id}")]
-        public async Task Put(Guid id, [FromBody]Mprn mpan)
+        public async Task Put(Guid id, [FromBody]MprnDto mprnDto)
         {
-            await _dbContext.Update(mpan);
+            var mprn = Mapper.Map<Mprn>(mprnDto);
+            mprn.Id = id;
+
+            await _dbContext.Update(mprn);
         }
 
         [HttpDelete("{id}")]

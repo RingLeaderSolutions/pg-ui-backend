@@ -34,6 +34,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task Update(Mpan mpan)
         {
             Mpans.Attach(mpan);
+
+            var entry = Entry(mpan);
+            entry.State = EntityState.Modified;
+
             await SaveChangesAsync();
         }
 

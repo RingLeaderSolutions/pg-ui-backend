@@ -23,8 +23,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public bool ChangeOfUse { get; set; }
 
         public string Size { get; set; }
-
-        public virtual SiteDto Site { get; set; }
     }
 
     public class MprnsDto
