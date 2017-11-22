@@ -24,6 +24,12 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 await RetrieveMprns().SingleOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<Mprn> RetrieveMprnByCore(string mprnCore)
+        {
+            return
+                await RetrieveMprns().SingleOrDefaultAsync(a => a.MprnCore == mprnCore);
+        }
+
         public async Task Add(Mprn mprn)
         {
             Mprns.Add(mprn);
