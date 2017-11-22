@@ -13,17 +13,21 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string AccountNumber { get; set; }
 
-        public string Name { get; set; }
+        public string CompanyName { get; set; }
 
         public string CompanyRegistrationNumber { get; set; }
 
         public string Address { get; set; }
 
+        public string Postcode { get; set; }
+
+        public string CountryOfOrigin { get; set; }
+
+        public DateTime IncorporationDate { get; set; }
+
         public string Contact { get; set; }
 
         public string CompanyStatus { get; set; }
-
-        public string RegistrationAddress { get; set; }
 
         public string CreditRating { get; set; }
 
