@@ -5,6 +5,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
 {
     public class BulkRequestDto
     {
+        public string RequestId { get; set; }
+
         public string PortfolioId { get; set; }
         
         public AccountDto Account { get; set; }
@@ -21,6 +23,10 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
 
     public class BulkResponseDto
     {
+        public string RequestId { get; set; }
+
+        public string PortfolioId { get; set; }
+        
         public BulkUploadResponseDto Account { get; set; }
 
         public BulkUploadSitesResponseDto Sites { get; set; }
@@ -35,9 +41,16 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
 
     public class BulkUploadSitesResponseDto : BulkUploadResponseDto
     {
-        public List<BulkUploadResponseDto> Mpans { get; set; }
+        public string SiteCode { get; set; }
 
-        public List<BulkUploadResponseDto> Mprns { get; set; }
+        public List<MeterBulkUploadResponseDto> Mpans { get; set; }
+
+        public List<MeterBulkUploadResponseDto> Mprns { get; set; }
+    }
+
+    public class MeterBulkUploadResponseDto : BulkUploadResponseDto
+    {
+        public string Core { get; set; }
     }
 
     public static class BulkUploadResponseStates

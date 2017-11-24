@@ -6,6 +6,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
     {
         public Guid Id { get; set; }
 
+        public string SiteCode { get; set; }
+
         public string Name { get; set; }
 
         public string Contact { get; set; }
@@ -13,5 +15,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public string Address { get; set; }
 
         public string CoT { get; set; }
+
+        public string BillingAddress { get; set; }
+
+        public string Postcode { get; set; }
     }
 }
