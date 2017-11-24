@@ -25,7 +25,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public bool ChangeOfUse { get; set; }
 
-        public string Size { get; set; }
+        public decimal Size { get; set; }
 
         public virtual Site Site { get; set; }
     }

@@ -26,6 +26,13 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     .SingleOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<Site> RetrieveSiteByCode(string code)
+        {
+            return
+                await RetrieveSites()
+                    .SingleOrDefaultAsync(a => a.SiteCode == code);
+        }
+
         public async Task Add(Site site)
         {
             Sites.Add(site);
