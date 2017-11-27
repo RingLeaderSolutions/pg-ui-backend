@@ -36,7 +36,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string Postcode { get; set; }
 
-        public string Name { get; set; }
+        public bool IsNewConnection { get; set; }
 
         public string Connection { get; set; }
 
