@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -104,7 +105,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
                 using (var dbContext = CreateDbContext())
                 {
-                    var updatedSite = await dbContext.RetrieveSiteById(siteId);
+                    var updatedSite = await dbContext.Sites
+                        .AsQueryable()
+                        .SingleOrDefaultAsync(s => s.Id == siteId);
 
                     var mpanResults = new List<MeterBulkUploadResponseDto>();
                     foreach (var siteMpan in site.Mpans)
