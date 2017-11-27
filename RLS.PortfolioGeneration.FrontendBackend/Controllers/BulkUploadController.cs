@@ -23,7 +23,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             _configuration = configuration;
         }
 
-        public ModelDbContext CreateDbContext()
+        private ModelDbContext CreateDbContext()
         {
             var dbOptions = new DbContextOptionsBuilder<ModelDbContext>()
                 .UseSqlServer(_configuration.GetConnectionString("DefaultConnection"))
