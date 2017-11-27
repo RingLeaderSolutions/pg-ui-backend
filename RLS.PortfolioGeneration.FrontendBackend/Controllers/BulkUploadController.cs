@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload;
 using RLS.PortfolioGeneration.Persistence.Model;
 using RLS.PortfolioGeneration.Persistence.Model.Clients;
@@ -13,51 +15,84 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
     [Route("api/bulk")]
     public class BulkUploadController : Controller
     {
-        private readonly ModelDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public BulkUploadController(ModelDbContext dbContext)
+        public BulkUploadController(IConfiguration configuration)
         {
-            _dbContext = dbContext;
+            _configuration = configuration;
+        }
+
+        public ModelDbContext CreateDbContext()
+        {
+            var dbOptions = new DbContextOptionsBuilder<ModelDbContext>()
+                .UseSqlServer(_configuration.GetConnectionString("DefaultConnection"))
+                .Options;
+
+            return new ModelDbContext(dbOptions);
         }
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BulkRequestDto bulkRequestDto)
         {
             var response = new BulkResponseDto();
+            response.RequestId = bulkRequestDto.RequestId;
+            response.PortfolioId = bulkRequestDto.PortfolioId;
 
-            if (bulkRequestDto.Account.Id == Guid.Empty)
+            var accountId = bulkRequestDto.Account.Id;
+            if (accountId == null || accountId == Guid.Empty)
             {
                 return BadRequest("No account id provided.");
             }
             
             var account = Mapper.Map<Account>(bulkRequestDto.Account);
-            await _dbContext.Update(account);
+            using (var dbContext = CreateDbContext())
+            {
+                await dbContext.Update(account);
+            }
             
             response.Account = new BulkUploadResponseDto
             {
-                Id = account.Id,
+                Id = accountId.Value,
                 State = BulkUploadResponseStates.Updated
             };
 
             foreach (var site in bulkRequestDto.Sites)
             {
-                var mappedSite = Mapper.Map<Account>(bulkRequestDto.Account);
+                var mappedSite = Mapper.Map<Site>(site);
 
-                var existingSite = await _dbContext.RetrieveSiteByCode(site.SiteCode);
-                var siteId = existingSite?.Id ?? Guid.NewGuid();
-
-                mappedSite.Id = siteId;
-
+                Guid siteId;
                 string siteState;
-                if (existingSite != null)
+                using (var dbContext = CreateDbContext())
                 {
-                    await _dbContext.Update(mappedSite);
-                    siteState = BulkUploadResponseStates.Updated;
-                }
-                else
-                {
-                    await _dbContext.Add(mappedSite);
-                    siteState = BulkUploadResponseStates.Created;
+                    var existingSite = await dbContext.RetrieveSiteByCode(site.SiteCode);
+                    var siteExists = existingSite != null;
+
+                    siteId = existingSite?.Id ?? Guid.NewGuid();
+
+                    mappedSite.Id = siteId;
+
+                    if (siteExists)
+                    {
+                        await dbContext.Update(mappedSite);
+                        siteState = BulkUploadResponseStates.Updated;
+                    }
+                    else
+                    {
+                        await dbContext.Add(mappedSite);
+
+                        var tenancyPeriod = new TenancyPeriod
+                        {
+                            Id = Guid.NewGuid(),
+                            AccountId = accountId.Value,
+                            SiteId = siteId,
+                            Site = mappedSite,
+                            EffectiveFrom = DateTime.MinValue,
+                            EffectiveTo = DateTime.MaxValue
+                        };
+
+                        await dbContext.Add(tenancyPeriod);
+                        siteState = BulkUploadResponseStates.Created;
+                    }
                 }
 
                 var siteResponse = new BulkUploadSitesResponseDto
@@ -67,69 +102,78 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                     State =  siteState
                 };
 
-                var mpanResults = new List<MeterBulkUploadResponseDto>();
-                foreach (var siteMpan in site.Mpans)
+                using (var dbContext = CreateDbContext())
                 {
-                    var mpan = Mapper.Map<Mpan>(siteMpan);
+                    var updatedSite = await dbContext.RetrieveSiteById(siteId);
 
-                    var existing = await _dbContext.RetrieveMpanByCore(siteMpan.MpanCore);
-
-                    var mpanId = existing?.Id ?? Guid.NewGuid();
-                    mpan.Id = mpanId;
-
-                    string mpanState;
-                    if (existing != null)
+                    var mpanResults = new List<MeterBulkUploadResponseDto>();
+                    foreach (var siteMpan in site.Mpans)
                     {
-                        await _dbContext.Update(mpan);
-                        mpanState = BulkUploadResponseStates.Updated;
+                        var mpan = Mapper.Map<Mpan>(siteMpan);
+
+                        var existing = await dbContext.RetrieveMpanByCore(siteMpan.MpanCore);
+
+                        var mpanId = existing?.Id ?? Guid.NewGuid();
+                        mpan.Id = mpanId;
+                        mpan.Site = updatedSite;
+
+                        string mpanState;
+                        if (existing != null)
+                        {
+                            await dbContext.Update(mpan);
+                            mpanState = BulkUploadResponseStates.Updated;
+                        }
+                        else
+                        {
+                            await dbContext.Add(mpan);
+                            mpanState = BulkUploadResponseStates.Created;
+                        }
+
+                        mpanResults.Add(new MeterBulkUploadResponseDto
+                        {
+                            Core = mpan.MpanCore,
+                            Id = mpanId,
+                            State = mpanState
+                        });
                     }
-                    else
+
+                    var mprnResults = new List<MeterBulkUploadResponseDto>();
+                    foreach (var siteMprn in site.Mprns)
                     {
-                        await _dbContext.Add(mpan);
-                        mpanState = BulkUploadResponseStates.Created;
+                        var mprn = Mapper.Map<Mprn>(siteMprn);
+
+                        var existing = await dbContext.RetrieveMprnByCore(siteMprn.MprnCore);
+                        var mprnId = existing?.Id ?? Guid.NewGuid();
+                        mprn.Id = mprnId;
+                        mprn.Site = updatedSite;
+
+                        string mprnState;
+                        if (existing != null)
+                        {
+                            await dbContext.Update(mprn);
+                            mprnState = BulkUploadResponseStates.Updated;
+                        }
+                        else
+                        {
+                            await dbContext.Add(mprn);
+                            mprnState = BulkUploadResponseStates.Created;
+                        }
+
+                        mprnResults.Add(new MeterBulkUploadResponseDto
+                        {
+                            Core = mprn.MprnCore,
+                            Id = mprnId,
+                            State = mprnState
+                        });
                     }
 
-                    mpanResults.Add(new MeterBulkUploadResponseDto
-                    {
-                        Id = mpanId,
-                        State = mpanState
-                    });
+                    siteResponse.Mpans = mpanResults;
+                    siteResponse.Mprns = mprnResults;
                 }
-
-                var mprnResults = new List<MeterBulkUploadResponseDto>();
-                foreach (var siteMprn in site.Mprns)
-                {
-                    var mprn = Mapper.Map<Mprn>(siteMprn);
-
-                    var existing = await _dbContext.RetrieveMprnByCore(siteMprn.MprnCore);
-                    var mprnId = existing?.Id ?? Guid.NewGuid();
-                    mprn.Id = mprnId;
-
-                    string mprnState;
-                    if (existing != null)
-                    {
-                        await _dbContext.Update(mprn);
-                        mprnState = BulkUploadResponseStates.Updated;
-                    }
-                    else
-                    {
-                        await _dbContext.Add(mprn);
-                        mprnState = BulkUploadResponseStates.Created;
-                    }
-
-                    mprnResults.Add(new MeterBulkUploadResponseDto
-                    {
-                        Id = mprnId,
-                        State = mprnState
-                    });
-                }
-
-                siteResponse.Mpans = mpanResults;
-                siteResponse.Mprns = mprnResults;
-
+                
                 response.Sites = siteResponse;
             }
-
+            
             return Ok(response);
         }
     }

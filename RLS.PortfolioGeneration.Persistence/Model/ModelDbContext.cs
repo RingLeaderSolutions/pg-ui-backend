@@ -41,8 +41,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 .WithMany(p => p.PortfolioMeters);
         }
 
-
-
         public ModelDbContext(DbContextOptions<ModelDbContext> options) : base(options)
         {
 

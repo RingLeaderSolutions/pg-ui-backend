@@ -4,7 +4,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
     public class SiteDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string SiteCode { get; set; }
 
