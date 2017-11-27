@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos;
 using RLS.PortfolioGeneration.Persistence.Model;
 using Swashbuckle.AspNetCore.Swagger;
@@ -50,7 +52,17 @@ namespace RLS.PortfolioGeneration.FrontendBackend
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "TPI Flow Heirarchy API",
+                    Description = "Use this API to manage heirarchical entities and perform bulk uploads as necessary.",
+                    Version = "v1"
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var xmlPath = Path.Combine(basePath, "RLS.PortfolioGeneration.FrontendBackend.xml");
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.AddDbContext<ModelDbContext>(
