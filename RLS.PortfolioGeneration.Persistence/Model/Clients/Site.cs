@@ -8,18 +8,23 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
     [Table("site")]
     public class Site
     {
-        [Key, Column("Id")]
+        [Required, Column("Id")]
         public Guid Id { get; set; }
+
+        [Required]
+        public string SiteCode { get; set; }
 
         public string Name { get; set; }
 
         public string Contact { get; set; }
 
-        public decimal Capacity { get; set; }
-
         public string Address { get; set; }
 
         public string CoT { get; set; }
+
+        public string BillingAddress { get; set; }
+
+        public string Postcode { get; set; }
 
         public virtual ICollection<TenancyPeriod> TenancyPeriods { get; set; }
 

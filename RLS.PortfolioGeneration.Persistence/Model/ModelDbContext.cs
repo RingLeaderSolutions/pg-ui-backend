@@ -20,7 +20,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 .HasOne(t => t.Site)
                 .WithMany(s => s.TenancyPeriods);
 
-            modelBuilder.Entity<Site>();
+            modelBuilder.Entity<Site>()
+                .HasKey(k => new { k.Id, k.SiteCode });
             
             modelBuilder.Entity<Mpan>()
                 .HasOne(s => s.Site)
@@ -39,8 +40,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 .HasOne(pm=> pm.Portfolio)
                 .WithMany(p => p.PortfolioMeters);
         }
-
-
 
         public ModelDbContext(DbContextOptions<ModelDbContext> options) : base(options)
         {

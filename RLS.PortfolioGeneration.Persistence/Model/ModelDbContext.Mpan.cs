@@ -25,6 +25,12 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 await RetrieveMpans().SingleOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<Mpan> RetrieveMpanByCore(string mpanCore)
+        {
+            return
+                await RetrieveMpans().SingleOrDefaultAsync(a => a.MpanCore == mpanCore);
+        }
+
         public async Task Add(Mpan mpan)
         {
             Mpans.Add(mpan);
@@ -34,6 +40,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task Update(Mpan mpan)
         {
             Mpans.Attach(mpan);
+
+            var entry = Entry(mpan);
+            entry.State = EntityState.Modified;
+
             await SaveChangesAsync();
         }
 

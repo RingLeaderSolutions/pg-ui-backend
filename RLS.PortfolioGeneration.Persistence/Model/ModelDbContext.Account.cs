@@ -34,6 +34,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task Update(Account account)
         {
             Accounts.Attach(account);
+
+            var entry = Entry(account);
+            entry.State = EntityState.Modified;
+
             await SaveChangesAsync();
         }
 

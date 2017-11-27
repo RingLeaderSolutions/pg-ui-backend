@@ -26,6 +26,13 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     .SingleOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<Site> RetrieveSiteByCode(string code)
+        {
+            return
+                await RetrieveSites()
+                    .SingleOrDefaultAsync(a => a.SiteCode == code);
+        }
+
         public async Task Add(Site site)
         {
             Sites.Add(site);
@@ -35,6 +42,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         public async Task Update(Site site)
         {
             Sites.Attach(site);
+
+            var entry = Entry(site);
+            entry.State = EntityState.Modified;
+
             await SaveChangesAsync();
         }
 

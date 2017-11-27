@@ -35,6 +35,20 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string DCAgent { get; set; }
 
+        public string SerialNumber { get; set; }
+
+        public string Postcode { get; set; }
+
+        public string Name { get; set; }
+
+        public string Connection { get; set; }
+
+        public int EAC { get; set; }
+
+        public int REC { get; set; }
+
+        public decimal Capacity { get; set; }
+
         public virtual Site Site { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
     public class MprnDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string MprnCore { get; set; }
 
@@ -22,9 +22,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public bool ChangeOfUse { get; set; }
 
-        public string Size { get; set; }
-
-        public virtual SiteDto Site { get; set; }
+        public decimal Size { get; set; }
     }
 
     public class MprnsDto

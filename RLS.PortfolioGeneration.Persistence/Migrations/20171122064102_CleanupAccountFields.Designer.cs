@@ -11,9 +11,10 @@ using System;
 namespace RLS.PortfolioGeneration.Persistence.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    partial class ModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171122064102_CleanupAccountFields")]
+    partial class CleanupAccountFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,15 +59,9 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<decimal>("Capacity");
-
-                    b.Property<string>("Connection");
-
                     b.Property<string>("DAAgent");
 
                     b.Property<string>("DCAgent");
-
-                    b.Property<int>("EAC");
 
                     b.Property<string>("GSPGroup");
 
@@ -85,25 +80,15 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.Property<string>("MpanCore")
                         .IsRequired();
 
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Postcode");
-
                     b.Property<string>("ProfileClass");
 
-                    b.Property<int>("REC");
-
                     b.Property<string>("RetrievalMethod");
-
-                    b.Property<string>("SerialNumber");
-
-                    b.Property<string>("SiteCode");
 
                     b.Property<Guid?>("SiteId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SiteId", "SiteCode");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("mpan");
                 });
@@ -129,15 +114,13 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<string>("SerialNumber");
 
-                    b.Property<string>("SiteCode");
-
                     b.Property<Guid?>("SiteId");
 
-                    b.Property<decimal>("Size");
+                    b.Property<string>("Size");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SiteId", "SiteCode");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("mprn");
                 });
@@ -145,13 +128,10 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.Site", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<string>("SiteCode");
-
                     b.Property<string>("Address");
-
-                    b.Property<string>("BillingAddress");
 
                     b.Property<string>("CoT");
 
@@ -159,9 +139,7 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Postcode");
-
-                    b.HasKey("Id", "SiteCode");
+                    b.HasKey("Id");
 
                     b.ToTable("site");
                 });
@@ -178,17 +156,13 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<DateTime>("EffectiveTo");
 
-                    b.Property<string>("SiteCode");
-
                     b.Property<Guid>("SiteId");
-
-                    b.Property<Guid?>("SiteId1");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("SiteId1", "SiteCode");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("tenancy_period");
                 });
@@ -243,14 +217,14 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 {
                     b.HasOne("RLS.PortfolioGeneration.Persistence.Model.Clients.Site", "Site")
                         .WithMany("Mpans")
-                        .HasForeignKey("SiteId", "SiteCode");
+                        .HasForeignKey("SiteId");
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.Mprn", b =>
                 {
                     b.HasOne("RLS.PortfolioGeneration.Persistence.Model.Clients.Site", "Site")
                         .WithMany("Mprns")
-                        .HasForeignKey("SiteId", "SiteCode");
+                        .HasForeignKey("SiteId");
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.TenancyPeriod", b =>
@@ -262,7 +236,8 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.HasOne("RLS.PortfolioGeneration.Persistence.Model.Clients.Site", "Site")
                         .WithMany("TenancyPeriods")
-                        .HasForeignKey("SiteId1", "SiteCode");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Pricing.PortfolioMeter", b =>

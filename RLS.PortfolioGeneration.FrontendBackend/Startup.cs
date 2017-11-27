@@ -44,7 +44,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend
             });
             services.AddAutoMapper();
             
-
             Mapper.Initialize(cfg => {
                 cfg.AddProfile<DomainProfile>();
             });
@@ -56,6 +55,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend
 
             services.AddDbContext<ModelDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

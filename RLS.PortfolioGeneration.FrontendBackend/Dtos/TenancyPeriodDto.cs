@@ -6,8 +6,10 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
     {
         public Guid Id { get; set; }
 
-        public virtual AccountDto Account { get; set; }
-        
+        public Guid AccountId { get; set; }
+
+        public Guid SiteId { get; set; }
+
         public DateTime EffectiveFrom { get; set; }
 
         public DateTime EffectiveTo { get; set; }
