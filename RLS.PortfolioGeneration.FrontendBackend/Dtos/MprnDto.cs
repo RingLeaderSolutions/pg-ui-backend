@@ -6,7 +6,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
     public class MprnDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string MprnCore { get; set; }
 
