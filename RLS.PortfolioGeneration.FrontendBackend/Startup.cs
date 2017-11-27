@@ -54,7 +54,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend
             {
                 c.SwaggerDoc("v1", new Info
                 {
-                    Title = "TPI Flow Heirarchy API",
+                    Title = "TPI Flow Hierarchy API",
                     Description = "Use this API to manage heirarchical entities and perform bulk uploads as necessary.",
                     Version = "v1"
                 });
