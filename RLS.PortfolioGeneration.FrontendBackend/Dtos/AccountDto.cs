@@ -18,7 +18,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string CountryOfOrigin { get; set; }
 
-        public DateTime IncorporationDate { get; set; }
+        public DateTime? IncorporationDate { get; set; }
 
         public string Contact { get; set; }
 

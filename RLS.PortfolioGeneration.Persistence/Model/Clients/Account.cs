@@ -23,7 +23,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string CountryOfOrigin { get; set; }
 
-        public DateTime IncorporationDate { get; set; }
+        public DateTime? IncorporationDate { get; set; }
 
         public string Contact { get; set; }
 

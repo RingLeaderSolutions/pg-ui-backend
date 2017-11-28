@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
@@ -8,6 +9,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
     {
         public Guid? Id { get; set; }
 
+        [Required]
         public string MpanCore { get; set; }
 
         public string MeterType { get; set; }

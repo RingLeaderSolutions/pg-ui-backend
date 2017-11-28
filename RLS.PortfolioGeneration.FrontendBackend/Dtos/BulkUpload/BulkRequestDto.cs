@@ -29,7 +29,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
         
         public BulkUploadResponseDto Account { get; set; }
 
-        public BulkUploadSitesResponseDto Sites { get; set; }
+        public BulkUploadSitesResponseDto[] Sites { get; set; }
     }
 
     public class BulkUploadResponseDto

@@ -6,6 +6,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload;
 using RLS.PortfolioGeneration.Persistence.Model;
 using RLS.PortfolioGeneration.Persistence.Model.Clients;
@@ -33,8 +35,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] BulkRequestDto bulkRequestDto)
+        public async Task<ActionResult> Post([FromBody] JObject obj)
         {
+            var bulkRequestDto = obj.ToObject<BulkRequestDto>();
             var response = new BulkResponseDto();
             response.RequestId = bulkRequestDto.RequestId;
             response.PortfolioId = bulkRequestDto.PortfolioId;
@@ -57,6 +60,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                 State = BulkUploadResponseStates.Updated
             };
 
+            var sites = new List<BulkUploadSitesResponseDto>();
             foreach (var site in bulkRequestDto.Sites)
             {
                 var mappedSite = Mapper.Map<Site>(site);
@@ -173,10 +177,11 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                     siteResponse.Mpans = mpanResults;
                     siteResponse.Mprns = mprnResults;
                 }
-                
-                response.Sites = siteResponse;
+
+                sites.Add(siteResponse);
             }
-            
+
+            response.Sites = sites.ToArray();
             return Ok(response);
         }
     }
