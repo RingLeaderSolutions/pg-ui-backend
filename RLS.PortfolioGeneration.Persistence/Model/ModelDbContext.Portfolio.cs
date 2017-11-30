@@ -34,8 +34,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 (await (from pm in portfolioMeters
                         join mpan in Mpans on pm.MeterNumber equals mpan.MpanCore
                         join tp in tenancyPeriods on mpan.Site.Id equals tp.SiteId
-                        where tp.EffectiveFrom >= pm.Portfolio.ContractStart
-                              && tp.EffectiveTo <= pm.Portfolio.ContractEnd
+                        where tp.EffectiveFrom <= pm.Portfolio.ContractStart
+                              && tp.EffectiveTo >= pm.Portfolio.ContractEnd
                         select tp
                     )
                     .ToListAsync())
@@ -51,8 +51,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 (await (from pm in portfolioMeters
                         join mprn in Mprns on pm.MeterNumber equals mprn.MprnCore
                         join tp in tenancyPeriods on mprn.Site.Id equals tp.SiteId
-                        where tp.EffectiveFrom >= pm.Portfolio.ContractStart
-                              && tp.EffectiveTo <= pm.Portfolio.ContractEnd
+                        where tp.EffectiveFrom <= pm.Portfolio.ContractStart
+                              && tp.EffectiveTo >= pm.Portfolio.ContractEnd
                         select tp
                     )
                     .ToListAsync())
