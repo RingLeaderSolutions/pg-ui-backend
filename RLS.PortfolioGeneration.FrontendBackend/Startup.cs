@@ -36,7 +36,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
             services.AddCors(service =>
             {
                 service.AddPolicy("CorsPolicy",
@@ -44,6 +43,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend
                         .AllowAnyMethod()
                         .AllowAnyHeader());
             });
+            services.AddMvc();
             services.AddAutoMapper();
             
             Mapper.Initialize(cfg => {
@@ -77,8 +77,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
             app.UseCors("CorsPolicy");
+            app.UseMvc();
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
