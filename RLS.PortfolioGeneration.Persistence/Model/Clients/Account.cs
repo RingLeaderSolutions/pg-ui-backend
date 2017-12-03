@@ -31,6 +31,14 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string CreditRating { get; set; }
 
+        public bool IsRegisteredCharity { get; set; }
+
+        public bool HasCCLException { get; set; }
+
+        public bool IsVATEligible { get; set; }
+
+        public bool HasFiTException { get; set; }
+
         public virtual ICollection<TenancyPeriod> TenancyPeriods { get; set; }
     }
 }

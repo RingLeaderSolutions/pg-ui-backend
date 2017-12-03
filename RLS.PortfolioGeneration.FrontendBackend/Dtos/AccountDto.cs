@@ -25,5 +25,13 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public string CompanyStatus { get; set; }
 
         public string CreditRating { get; set; }
+
+        public bool IsRegisteredCharity { get; set; }
+
+        public bool HasCCLException { get; set; }
+
+        public bool IsVATEligible { get; set; }
+
+        public bool HasFiTException { get; set; }
     }
 }
