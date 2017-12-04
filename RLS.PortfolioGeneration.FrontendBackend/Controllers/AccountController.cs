@@ -83,6 +83,30 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         }
 
         /// <summary>
+        /// Updates the status related flags for the given account.
+        /// </summary>
+        /// <param name="id">The id of the account to update</param>
+        /// <param name="flagsDto">The representation of company status flags (CCL Exceptions, Registered charity, etc)</param>
+        /// <returns>The updated account object.</returns>
+        [HttpPut("status/{id}")]
+        [ProducesResponseType(200)]
+        public async Task<AccountDto> Put(Guid id, [FromBody] CompanyFlagsDto flagsDto)
+        {
+            var account = await _dbContext.RetrieveAccountById(id);
+
+            account.HasCCLException = flagsDto.HasCCLException;
+            account.HasFiTException = flagsDto.HasFiTException;
+            account.IsRegisteredCharity = flagsDto.IsRegisteredCharity;
+            account.IsVATEligible = flagsDto.IsVATEligible;
+
+            await _dbContext.Update(account);
+
+            var updatedAccount = await _dbContext.RetrieveAccountById(id);
+
+            return Mapper.Map<AccountDto>(updatedAccount);
+        }
+
+        /// <summary>
         /// Deletes the account with the specified id.
         /// </summary>
         /// <param name="id">The id of the account to delete.</param>

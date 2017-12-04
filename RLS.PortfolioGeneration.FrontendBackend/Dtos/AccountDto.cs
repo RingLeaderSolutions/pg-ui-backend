@@ -34,4 +34,15 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public bool HasFiTException { get; set; }
     }
+
+    public class CompanyFlagsDto
+    {
+        public bool IsRegisteredCharity { get; set; }
+
+        public bool HasCCLException { get; set; }
+
+        public bool IsVATEligible { get; set; }
+
+        public bool HasFiTException { get; set; }
+    }
 }
