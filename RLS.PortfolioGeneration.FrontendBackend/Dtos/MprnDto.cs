@@ -14,17 +14,17 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string SerialNumber { get; set; }
 
-        public bool IsImperial { get; set; }
+        public bool? IsImperial { get; set; }
 
         public string Make { get; set; }
 
         public string Model { get; set; }
 
-        public double AQ { get; set; }
+        public double? AQ { get; set; }
 
-        public bool ChangeOfUse { get; set; }
+        public bool? ChangeOfUse { get; set; }
 
-        public decimal Size { get; set; }
+        public decimal? Size { get; set; }
     }
 
     public class MprnsDto

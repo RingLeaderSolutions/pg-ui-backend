@@ -26,7 +26,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string MeasurementClass { get; set; }
 
-        public bool IsEnergized { get; set; }
+        public bool? IsEnergized { get; set; }
 
         public string MOAgent { get; set; }
 
@@ -38,13 +38,13 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string Postcode { get; set; }
 
-        public bool IsNewConnection { get; set; }
+        public bool? IsNewConnection { get; set; }
 
         public string Connection { get; set; }
 
-        public int EAC { get; set; }
+        public int? EAC { get; set; }
 
-        public int REC { get; set; }
+        public int? REC { get; set; }
 
         public decimal Capacity { get; set; }
     }

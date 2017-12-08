@@ -9,7 +9,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
 
         public string PortfolioId { get; set; }
         
-        public AccountDto Account { get; set; }
+        public string AccountId { get; set; }
 
         public QualifiedSiteDto[] Sites { get; set; }
     }
@@ -27,7 +27,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
 
         public string PortfolioId { get; set; }
         
-        public BulkUploadResponseDto Account { get; set; }
+        public string AccountId { get; set; }
 
         public BulkUploadSitesResponseDto[] Sites { get; set; }
     }
