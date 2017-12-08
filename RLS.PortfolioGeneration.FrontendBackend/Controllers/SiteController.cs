@@ -37,6 +37,19 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             return Mapper.Map<SiteDto>(site);
         }
 
+        [HttpGet("portfolio/{portfolioId}")]
+        public async Task<object> GetByPortfolio(string portfolioId)
+        {
+            var sites = await _dbContext.RetrieveSiteAndMetersForPortfolio(portfolioId);
+
+            var responseSites = sites.Select(Mapper.Map<SiteWithMetersDto>).ToList();
+
+            return new 
+            {
+                Sites = responseSites
+            };
+        }
+
         [HttpPost]
         public async Task<CreatedResult> Post([FromBody]SiteDto siteDto)
         {

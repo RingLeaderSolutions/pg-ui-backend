@@ -14,6 +14,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
             CreateMap<TenancyPeriod, TenancyPeriodDto>();
             CreateMap<TenancyPeriodDto, TenancyPeriod>();
 
+            CreateMap<Site, SiteWithMetersDto>();
             CreateMap<Site, SiteDto>();
             CreateMap<SiteDto, Site>();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using RLS.PortfolioGeneration.Persistence.Extensions;
 using RLS.PortfolioGeneration.Persistence.Model.Clients;
 using RLS.PortfolioGeneration.Persistence.Model.Pricing;
 
@@ -57,6 +58,42 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     )
                     .ToListAsync())
                 .SelectMany(tp => tp.Site.Mprns).ToList();
+        }
+        
+        public async Task<List<Site>> RetrieveSiteAndMetersForPortfolio(string portfolioId)
+        {
+            var tenancyPeriods = GetTenancyPeriods();
+            var portfolioMeters = GetPortfolioMeters(portfolioId);
+
+            var mpanSites =  await (from pm in portfolioMeters
+                         from site in Sites
+                         join mpan in Mpans on pm.MeterNumber equals mpan.MpanCore
+                         join tp in tenancyPeriods on mpan.Site.Id equals tp.SiteId
+                         where tp.EffectiveFrom <= pm.Portfolio.ContractStart
+                               && tp.EffectiveTo >= pm.Portfolio.ContractEnd
+                         where site.Id == mpan.Site.Id
+                         select site)
+                .Include(s => s.Mpans)
+                .Include(s => s.Mprns)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var mprnSites = await (from pm in portfolioMeters
+                    from site in Sites
+                    join mprn in Mprns on pm.MeterNumber equals mprn.MprnCore
+                    join tp in tenancyPeriods on mprn.Site.Id equals tp.SiteId
+                    where tp.EffectiveFrom <= pm.Portfolio.ContractStart
+                          && tp.EffectiveTo >= pm.Portfolio.ContractEnd
+                    where site.Id == mprn.Site.Id
+                    select site)
+                .Include(s => s.Mpans)
+                .Include(s => s.Mprns)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return mpanSites.Union(mprnSites)
+                .DistinctBy(s => s.Id)
+                .ToList();
         }
 
         private IQueryable<PortfolioMeter> GetPortfolioMeters(string portfolioId)

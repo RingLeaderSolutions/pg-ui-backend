@@ -20,4 +20,11 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string Postcode { get; set; }
     }
+
+    public class SiteWithMetersDto : SiteDto
+    {
+        public MpanDto[] Mpans { get; set; }
+
+        public MprnDto[] Mprns { get; set; }
+    }
 }
