@@ -281,8 +281,10 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         {
             var memberExpression = (MemberExpression)selector.Body;
             var property = (PropertyInfo)memberExpression.Member;
-            
-            if (!((K)property.GetValue(obj)).Equals(val))
+
+            var currentValue = (K) property.GetValue(obj);
+
+            if (currentValue == null  || !currentValue.Equals(val))
             {
                 property.SetValue(obj, val);
             }
