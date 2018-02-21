@@ -34,6 +34,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public string DCAgent { get; set; }
 
+        public string Voltage { get; set; }
+
         public string SerialNumber { get; set; }
 
         public string Postcode { get; set; }

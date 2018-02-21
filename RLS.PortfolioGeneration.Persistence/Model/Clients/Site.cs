@@ -18,7 +18,11 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string Contact { get; set; }
 
-        public string Address { get; set; }
+        public string Address1 { get; set; }
+
+        public string Address2 { get; set; }
+
+        public string Town { get; set; }
 
         public string CoT { get; set; }
 

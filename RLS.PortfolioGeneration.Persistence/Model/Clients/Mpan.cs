@@ -37,6 +37,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public string SerialNumber { get; set; }
 
+        public string Voltage { get; set; }
+
         public string Postcode { get; set; }
 
         public bool IsNewConnection { get; set; }

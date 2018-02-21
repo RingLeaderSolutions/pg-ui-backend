@@ -45,15 +45,10 @@ namespace RLS.PortfolioGeneration.NotificationService.Controllers
 
         private async Task<bool> NotifyClients(NotificationMessage message)
         {
-            if (message.EntityType == null || message.EntityType != EntityType.Portfolio)
+            if (message.EntityType == null)
             {
                 return false;
             }
-
-            var portfolio = await _dbContext.RetrievePortfolioById(message.EntityId);
-
-            if (portfolio == null)
-                return false;
 
             await _hub.Clients.All.InvokeAsync("Notify", message);
             return true;

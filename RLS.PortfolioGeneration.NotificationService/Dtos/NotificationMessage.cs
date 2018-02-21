@@ -5,8 +5,7 @@ namespace RLS.PortfolioGeneration.NotificationService.Dtos
 {
     public class NotificationMessage
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Category? Category { get; set; }
+        public string Category { get; set; }
 
         public string Description { get; set; }
 
@@ -14,19 +13,16 @@ namespace RLS.PortfolioGeneration.NotificationService.Dtos
         public EntityType? EntityType { get; set; }
 
         public string EntityId { get; set; }
-    }
 
+        public string PortfolioId { get; set; }
 
-    public enum Category
-    {
-        Onboard,
-        Upload,
-        Portfolio
+        public string Who { get; set; }
     }
 
 
     public enum EntityType
     {
-        Portfolio
+        Portfolio,
+        Tender
     }
 }

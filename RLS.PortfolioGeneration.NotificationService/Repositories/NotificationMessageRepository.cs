@@ -6,10 +6,8 @@ namespace RLS.PortfolioGeneration.NotificationService.Repositories
 {
     public class NotificationMessageRepository
     {
-
         private readonly List<NotificationMessage> _messages = new List<NotificationMessage>();
-
-
+        
         public void Add(NotificationMessage message)
         {
             _messages.Add(message);

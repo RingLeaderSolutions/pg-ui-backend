@@ -213,7 +213,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         {
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Name, updatedDto.Name);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Contact, updatedDto.Contact);
-            SetStringPropertyIfNotNullOrEmpty(existing, e => e.Address, updatedDto.Address);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.Address1, updatedDto.Address1);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.Address2, updatedDto.Address2);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.Town, updatedDto.Town);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.CoT, updatedDto.CoT);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.BillingAddress, updatedDto.BillingAddress);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Postcode, updatedDto.Postcode);

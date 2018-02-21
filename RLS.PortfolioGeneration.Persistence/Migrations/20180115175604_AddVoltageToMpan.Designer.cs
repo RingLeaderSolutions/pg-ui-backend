@@ -11,9 +11,10 @@ using System;
 namespace RLS.PortfolioGeneration.Persistence.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    partial class ModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180115175604_AddVoltageToMpan")]
+    partial class AddVoltageToMpan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +160,7 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<string>("SiteCode");
 
-                    b.Property<string>("Address1");
-
-                    b.Property<string>("Address2");
+                    b.Property<string>("Address");
 
                     b.Property<string>("BillingAddress");
 
@@ -172,8 +171,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("Postcode");
-
-                    b.Property<string>("Town");
 
                     b.HasKey("Id", "SiteCode");
 
