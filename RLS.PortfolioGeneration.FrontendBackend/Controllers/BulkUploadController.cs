@@ -242,6 +242,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.DAAgent, updatedDto.DAAgent);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.DCAgent, updatedDto.DCAgent);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.SerialNumber, updatedDto.SerialNumber);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.Voltage, updatedDto.Voltage);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Postcode, updatedDto.Postcode);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Connection, updatedDto.Connection);
 
@@ -255,6 +256,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetPropertyIfNotNull(existing, e => e.ChangeOfUse, updatedDto.ChangeOfUse);
             SetPropertyIfNotNull(existing, e => e.AQ, updatedDto.AQ);
             SetPropertyIfNotNull(existing, e => e.IsImperial, updatedDto.IsImperial);
+            SetPropertyIfNotNull(existing, e => e.Size, updatedDto.Size);
 
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.SerialNumber, updatedDto.SerialNumber);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Make, updatedDto.Make);
