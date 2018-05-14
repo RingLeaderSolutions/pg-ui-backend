@@ -51,6 +51,12 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public decimal Capacity { get; set; }
 
+        public decimal VATPercentage { get; set; }
+
+        public bool CCLEligible { get; set; }
+
+        public Guid? TariffId { get; set; }
+
         public virtual Site Site { get; set; }
     }
 }

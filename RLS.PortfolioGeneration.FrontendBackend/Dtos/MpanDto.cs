@@ -49,6 +49,12 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public int? REC { get; set; }
 
         public decimal Capacity { get; set; }
+        
+        public decimal VATPercentage { get; set; }
+
+        public Guid? TariffId { get; set; }
+
+        public bool CCLEligible { get; set; }
     }
 
     public class MpansDto

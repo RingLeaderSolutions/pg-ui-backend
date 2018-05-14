@@ -75,18 +75,18 @@ namespace RLS.PortfolioGeneration.FrontendBackend
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.Use(async (context, next) =>
-           {
-               context.Response.OnStarting(() =>
-               {
-                   context.Request.Headers.TryGetValue("requestId", out var requestId);
-                   context.Response.Headers.Add("requestId", requestId);
+            {
+                context.Response.OnStarting(() =>
+                {
+                    context.Request.Headers.TryGetValue("requestId", out var requestId);
+                    context.Response.Headers.Add("requestId", requestId);
 
-                   return Task.CompletedTask;
-               });
+                    return Task.CompletedTask;
+                });
                
-               await next.Invoke();
-           });
-
+                await next.Invoke();
+            });
+            
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 

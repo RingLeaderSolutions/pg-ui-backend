@@ -11,9 +11,10 @@ using System;
 namespace RLS.PortfolioGeneration.Persistence.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    partial class ModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180420074146_AddNewFieldsToMpanAndMprn")]
+    partial class AddNewFieldsToMpanAndMprn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,31 +59,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("account");
-                });
-
-            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.AccountContact", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id");
-
-                    b.Property<Guid>("AccountId");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<string>("Role");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("contact");
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.Mpan", b =>
@@ -136,8 +112,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<Guid?>("SiteId");
 
-                    b.Property<Guid?>("TariffId");
-
                     b.Property<decimal>("VATPercentage");
 
                     b.Property<string>("Voltage");
@@ -157,15 +131,15 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
                     b.Property<double>("AQ");
 
+                    b.Property<string>("Address");
+
                     b.Property<bool>("CCLEligible");
 
                     b.Property<bool>("ChangeOfUse");
 
-                    b.Property<string>("EmergencyContactAddress");
+                    b.Property<string>("ContactName");
 
-                    b.Property<string>("EmergencyContactName");
-
-                    b.Property<string>("EmergencyContactTelephone");
+                    b.Property<string>("ContactTelephone");
 
                     b.Property<bool>("IsImperial");
 
@@ -183,8 +157,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.Property<Guid?>("SiteId");
 
                     b.Property<decimal>("Size");
-
-                    b.Property<Guid?>("TariffId");
 
                     b.Property<decimal>("VATPercentage");
 
@@ -294,14 +266,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                     b.HasIndex("portfolioId");
 
                     b.ToTable("portfolio_meter","pricing");
-                });
-
-            modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.AccountContact", b =>
-                {
-                    b.HasOne("RLS.PortfolioGeneration.Persistence.Model.Clients.Account", "Account")
-                        .WithMany("Contacts")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RLS.PortfolioGeneration.Persistence.Model.Clients.Mpan", b =>

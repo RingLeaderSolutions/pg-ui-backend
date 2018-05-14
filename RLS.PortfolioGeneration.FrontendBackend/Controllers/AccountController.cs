@@ -39,13 +39,52 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         /// Attempts to retrieve an account with the specified id.
         /// </summary>
         /// <param name="id">The id of the account to retrieve</param>
-        [ProducesResponseType(typeof(AccountDto), 201)]
+        [ProducesResponseType(typeof(AccountDto), 200)]
         [HttpGet("{id}")]
         public async Task<AccountDto> Get(Guid id)
         {
             var account = await _dbContext.RetrieveAccountById(id);
 
             return Mapper.Map<AccountDto>(account);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the full account tree including its tenancy periods, sites and meters.
+        /// </summary>
+        /// <param name="id">The id of the account to retrieve</param>
+        [ProducesResponseType(typeof(AccountWithSitesDto), 200)]
+        [HttpGet("detail/{id}")]
+        public async Task<AccountWithSitesDto> GetTree(Guid id)
+        {
+            var account = await _dbContext.RetrieveAccountById(id);
+
+            var sites = new List<SiteWithTenancyDto>();
+            var tenancyPeriods = await _dbContext.RetrieveTenancyPeriodByAccount(id);
+
+            foreach (var tenancyPeriod in tenancyPeriods)
+            {
+                var site = await _dbContext.RetrieveSiteTreeById(tenancyPeriod.SiteId);
+                sites.Add(MapSiteTree(site, tenancyPeriod));
+            }
+
+            var accountContacts = await _dbContext.RetrieveContactsByAccountId(id);
+
+            var accountDto = Mapper.Map<AccountWithSitesDto>(account);
+            accountDto.Sites = sites.ToArray();
+            accountDto.Contacts = accountContacts
+                .Select(Mapper.Map<AccountContactDto>)
+                .ToArray();
+
+            return accountDto;
+        }
+
+        private SiteWithTenancyDto MapSiteTree(Site site, TenancyPeriod tenancyPeriod)
+        {
+            var siteTree = Mapper.Map<SiteWithTenancyDto>(site);
+            siteTree.TenancyStart = tenancyPeriod.EffectiveFrom;
+            siteTree.TenancyEnd = tenancyPeriod.EffectiveTo;
+
+            return siteTree;
         }
 
         /// <summary>

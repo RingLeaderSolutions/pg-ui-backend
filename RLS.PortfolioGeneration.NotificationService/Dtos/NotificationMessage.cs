@@ -24,6 +24,7 @@ namespace RLS.PortfolioGeneration.NotificationService.Dtos
     {
         Portfolio,
         PortfolioMeters,
-        Tender
+        Tender,
+        Account
     }
 }

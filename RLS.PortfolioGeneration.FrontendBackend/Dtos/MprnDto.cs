@@ -25,6 +25,18 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public bool? ChangeOfUse { get; set; }
 
         public decimal? Size { get; set; }
+        
+        public decimal VATPercentage { get; set; }
+
+        public bool CCLEligible { get; set; }
+        
+        public string EmergencyContactAddress { get; set; }
+
+        public string EmergencyContactName { get; set; }
+
+        public string EmergencyContactTelephone { get; set; }
+
+        public Guid? TariffId { get; set; }
     }
 
     public class MprnsDto

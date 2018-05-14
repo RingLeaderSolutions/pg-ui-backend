@@ -25,7 +25,19 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public bool ChangeOfUse { get; set; }
 
+        public string EmergencyContactAddress { get; set; }
+
+        public string EmergencyContactName { get; set; }
+
+        public string EmergencyContactTelephone { get; set; }
+
+        public decimal VATPercentage { get; set; }
+
+        public bool CCLEligible { get; set; }
+
         public decimal Size { get; set; }
+
+        public Guid? TariffId { get; set; }
 
         public virtual Site Site { get; set; }
     }

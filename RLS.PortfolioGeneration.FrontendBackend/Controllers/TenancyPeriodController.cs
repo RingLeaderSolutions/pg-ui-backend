@@ -32,7 +32,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         [HttpGet("{id}")]
         public async Task<TenancyPeriodDto> Get(Guid id)
         {
-            var tenancyPeriod = await _dbContext.RetrieveTenacyPeriodById(id);
+            var tenancyPeriod = await _dbContext.RetrieveTenancyPeriodById(id);
 
             return Mapper.Map<TenancyPeriodDto>(tenancyPeriod);
         }

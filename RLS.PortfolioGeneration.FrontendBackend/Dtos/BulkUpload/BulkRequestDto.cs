@@ -57,6 +57,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload
     {
         public static readonly string Created = "Created";
         public static readonly string Updated = "Updated";
+        public static readonly string Rejected = "Rejected";
         public static readonly string Errored = "Errored";
     }
 }

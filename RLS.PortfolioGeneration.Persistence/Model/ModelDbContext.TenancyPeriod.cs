@@ -18,7 +18,14 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     .ToListAsync();
         }
 
-        public async Task<TenancyPeriod> RetrieveTenacyPeriodById(Guid id)
+        public async Task<List<TenancyPeriod>> RetrieveTenancyPeriodByAccount(Guid accountId)
+        {
+            return
+                await RetrieveTenancyPeriods().Where(tp => tp.AccountId == accountId)
+                    .ToListAsync();
+        }
+
+        public async Task<TenancyPeriod> RetrieveTenancyPeriodById(Guid id)
         {
             return
                 await RetrieveTenancyPeriods()

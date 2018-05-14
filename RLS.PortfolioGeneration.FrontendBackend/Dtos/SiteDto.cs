@@ -31,4 +31,11 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public MprnDto[] Mprns { get; set; }
     }
+
+    public class SiteWithTenancyDto : SiteWithMetersDto
+    {
+        public DateTime TenancyStart { get; set; }
+
+        public DateTime TenancyEnd { get; set; }
+    }
 }

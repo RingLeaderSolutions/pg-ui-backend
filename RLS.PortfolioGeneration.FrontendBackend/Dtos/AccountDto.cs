@@ -45,4 +45,11 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 
         public bool HasFiTException { get; set; }
     }
+
+    public class AccountWithSitesDto : AccountDto
+    {
+        public SiteWithTenancyDto[] Sites { get; set; }
+
+        public AccountContactDto[] Contacts { get; set; }
+    }
 }

@@ -33,6 +33,15 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     .SingleOrDefaultAsync(a => a.SiteCode == code);
         }
 
+        public async Task<Site> RetrieveSiteTreeById(Guid id)
+        {
+            return await Sites.AsQueryable()
+                .Include(s => s.Mpans)
+                .Include(s => s.Mprns)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(s => s.Id == id);
+        }
+
         public async Task Add(Site site)
         {
             Sites.Add(site);

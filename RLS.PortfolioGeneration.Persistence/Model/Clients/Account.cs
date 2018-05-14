@@ -40,5 +40,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
         public bool HasFiTException { get; set; }
 
         public virtual ICollection<TenancyPeriod> TenancyPeriods { get; set; }
+
+        public virtual ICollection<AccountContact> Contacts { get; set; }
     }
 }

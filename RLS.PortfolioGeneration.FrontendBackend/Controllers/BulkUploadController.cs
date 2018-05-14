@@ -37,6 +37,34 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             return new ModelDbContext(dbOptions);
         }
 
+
+        private async Task<BulkUploadRequestValidationResult> ValidateBulkRequest(Guid accountId, BulkRequestDto requestDto)
+        {
+            var result = true;
+            var errors = new List<string>();
+            using (var dbContext = CreateDbContext())
+            {
+                var tenancies = await dbContext.RetrieveTenancyPeriodByAccount(accountId);
+                foreach (var siteDto in requestDto.Sites)
+                {
+                    var existingSite = await dbContext.RetrieveSiteByCode(siteDto.SiteCode);
+
+                    // If the request is to create a site, continue
+                    if (existingSite == null) continue;
+
+                    // Attempt to retrieve a tenancy for this site
+                    var siteTenancyPeriod = tenancies.SingleOrDefault(tp => tp.SiteId == existingSite.Id);
+                        
+                    // If we find a tenancy period matching this site and account, it's valid
+                    if (siteTenancyPeriod != null) continue;
+                    errors.Add($"Site [{siteDto.SiteCode}] does not have a pre-existing tenancy period for account [{accountId}].");
+                    result = false;
+                }
+            }
+
+            return new BulkUploadRequestValidationResult(result, errors);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] JObject obj)
         {
@@ -55,6 +83,12 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                 {
                     return BadRequest("Specified AccountId does not exist");
                 }
+            }
+
+            var validationResult = await ValidateBulkRequest(accountId, bulkRequestDto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
             }
 
             response.RequestId = bulkRequestDto.RequestId;
@@ -230,7 +264,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetPropertyIfNotNull(existing, e => e.EAC, updatedDto.EAC);
             SetPropertyIfNotNull(existing, e => e.REC, updatedDto.REC);
             SetPropertyIfNotNull(existing, e => e.Capacity, updatedDto.Capacity);
-            
+            SetPropertyIfNotNull(existing, e => e.CCLEligible, updatedDto.CCLEligible);
+            SetPropertyIfNotNull(existing, e => e.VATPercentage, updatedDto.VATPercentage);
+
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.MeterType, updatedDto.MeterType);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.MeterTimeSwitchCode, updatedDto.MeterTimeSwitchCode);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.LLF, updatedDto.LLF);
@@ -246,6 +282,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Postcode, updatedDto.Postcode);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Connection, updatedDto.Connection);
 
+            existing.TariffId = updatedDto.TariffId;
             existing.Site = newSite;
 
             await dbContext.Update(existing);
@@ -257,11 +294,17 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetPropertyIfNotNull(existing, e => e.AQ, updatedDto.AQ);
             SetPropertyIfNotNull(existing, e => e.IsImperial, updatedDto.IsImperial);
             SetPropertyIfNotNull(existing, e => e.Size, updatedDto.Size);
+            SetPropertyIfNotNull(existing, e => e.CCLEligible, updatedDto.CCLEligible);
+            SetPropertyIfNotNull(existing, e => e.VATPercentage, updatedDto.VATPercentage);
 
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.SerialNumber, updatedDto.SerialNumber);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Make, updatedDto.Make);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Model, updatedDto.Model);
-            
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.EmergencyContactAddress, updatedDto.EmergencyContactAddress);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.EmergencyContactName, updatedDto.EmergencyContactName);
+            SetStringPropertyIfNotNullOrEmpty(existing, e => e.EmergencyContactTelephone, updatedDto.EmergencyContactTelephone);
+
+            existing.TariffId = updatedDto.TariffId;
             existing.Site = newSite;
 
             await dbContext.Update(existing);
@@ -288,10 +331,23 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
             var currentValue = (K) property.GetValue(obj);
 
-            if (currentValue == null  || !currentValue.Equals(val))
+            if (currentValue == null || !currentValue.Equals(val))
             {
                 property.SetValue(obj, val);
             }
+        }
+
+        private class BulkUploadRequestValidationResult
+        {
+            public BulkUploadRequestValidationResult(bool isValid, List<string> errors)
+            {
+                IsValid = isValid;
+                Errors = errors;
+            }
+
+            public bool IsValid { get; set; }
+
+            public List<string> Errors { get; set; }
         }
     }
 }
