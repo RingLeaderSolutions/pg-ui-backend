@@ -69,6 +69,10 @@ namespace RLS.PortfolioGeneration.FrontendBackend
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddOptions();
+
+            services.Configure<HierarchyServiceConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

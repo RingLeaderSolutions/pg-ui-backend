@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos;
+using RLS.PortfolioGeneration.FrontendBackend.Services;
 using RLS.PortfolioGeneration.Persistence.Model;
 using RLS.PortfolioGeneration.Persistence.Model.Clients;
 
@@ -14,10 +16,13 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
     public class AccountController : Controller
     {
         private readonly ModelDbContext _dbContext;
+        private AccountReportingService _reportingService;
 
-        public AccountController(ModelDbContext dbContext)
+        public AccountController(ModelDbContext dbContext, IOptions<HierarchyServiceConfiguration> configuration)
         {
             _dbContext = dbContext;
+
+            this._reportingService = new AccountReportingService(configuration.Value);
         }
 
         /// <summary>
@@ -103,6 +108,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
             await _dbContext.Add(account);
 
+            await _reportingService.ReportAccountCreated(accountId.ToString());
             return Created(new Uri($"/api/Account/{accountId}", UriKind.Relative), new { id = accountId });
         }
 
@@ -117,8 +123,9 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         {
             var account = Mapper.Map<Account>(accountDto);
             account.Id = id;
-
+            
             await _dbContext.Update(account);
+            await _reportingService.ReportAccountChanged(id.ToString());
         }
 
         /// <summary>
@@ -140,6 +147,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
             await _dbContext.Update(account);
 
+            await _reportingService.ReportAccountChanged(id.ToString());
+            
             var updatedAccount = await _dbContext.RetrieveAccountById(id);
 
             return Mapper.Map<AccountDto>(updatedAccount);
@@ -154,6 +163,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         public async Task Delete(Guid id)
         {
             await _dbContext.DeleteAccount(id);
+            await _reportingService.ReportAccountDeleted(id.ToString());
         }
     }
 }
