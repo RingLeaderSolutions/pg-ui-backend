@@ -57,6 +57,7 @@ namespace RLS.PortfolioGeneration.Persistence.Model
         private IQueryable<Mprn> RetrieveMprns()
         {
             return Mprns
+                .Include(mp => mp.Site)
                 .AsQueryable()
                 .AsNoTracking();
         }

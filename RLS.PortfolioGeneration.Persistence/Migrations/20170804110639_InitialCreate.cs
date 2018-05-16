@@ -126,12 +126,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 schema: "clients",
                 table: "tenancy_period",
                 column: "SiteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_portfolio_mpan_portfolioId",
-                schema: "pricing",
-                table: "portfolio_mpan",
-                column: "portfolioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -145,20 +139,12 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
                 schema: "clients");
 
             migrationBuilder.DropTable(
-                name: "portfolio_mpan",
-                schema: "pricing");
-
-            migrationBuilder.DropTable(
                 name: "account",
                 schema: "clients");
 
             migrationBuilder.DropTable(
                 name: "site",
                 schema: "clients");
-
-            migrationBuilder.DropTable(
-                name: "portfolio",
-                schema: "pricing");
         }
     }
 }

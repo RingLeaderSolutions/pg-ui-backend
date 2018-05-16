@@ -4,7 +4,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
 {
     public class AccountContactDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public Guid AccountId { get; set; }
 

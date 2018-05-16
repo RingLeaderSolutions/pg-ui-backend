@@ -8,7 +8,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos;
 using RLS.PortfolioGeneration.FrontendBackend.Dtos.BulkUpload;
@@ -41,23 +40,42 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         private async Task<BulkUploadRequestValidationResult> ValidateBulkRequest(Guid accountId, BulkRequestDto requestDto)
         {
             var result = true;
-            var errors = new List<string>();
+            var errors = new List<ValidationError>();
             using (var dbContext = CreateDbContext())
             {
                 var tenancies = await dbContext.RetrieveTenancyPeriodByAccount(accountId);
                 foreach (var siteDto in requestDto.Sites)
                 {
+                    foreach (var mpanDto in siteDto.Mpans)
+                    {
+                        var existingMpan = await dbContext.RetrieveMpanByCore(mpanDto.MpanCore);
+                        if (existingMpan == null) continue;
+                        if (tenancies.SingleOrDefault(tp => tp.SiteId == existingMpan.Site.Id) != null) continue;
+
+                        errors.Add(new ValidationError(ErrorEntity.Mpan, mpanDto.MpanCore, $"Unable to update MPAN as it is owned by a site which belongs to a different account to the one specified."));
+                        result = false;
+                    }
+
+                    foreach (var mprnDto in siteDto.Mprns)
+                    {
+                        var existingMprn = await dbContext.RetrieveMprnByCore(mprnDto.MprnCore);
+                        if (existingMprn == null) continue;
+                        if (tenancies.SingleOrDefault(tp => tp.SiteId == existingMprn.Site.Id) != null) continue;
+
+                        errors.Add(new ValidationError(ErrorEntity.Mprn, mprnDto.MprnCore, $"Unable to update MPRN as it is owned by a site which belongs to a different account to the one specified."));
+                        result = false;
+                    }
+
                     var existingSite = await dbContext.RetrieveSiteByCode(siteDto.SiteCode);
 
-                    // If the request is to create a site, continue
                     if (existingSite == null) continue;
 
                     // Attempt to retrieve a tenancy for this site
                     var siteTenancyPeriod = tenancies.SingleOrDefault(tp => tp.SiteId == existingSite.Id);
-                        
+
                     // If we find a tenancy period matching this site and account, it's valid
                     if (siteTenancyPeriod != null) continue;
-                    errors.Add($"Site [{siteDto.SiteCode}] does not have a pre-existing tenancy period for account [{accountId}].");
+                    errors.Add(new ValidationError(ErrorEntity.Site, siteDto.SiteCode, $"Unable to update Site as it belongs to a different account to the one specified."));
                     result = false;
                 }
             }
@@ -88,7 +106,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             var validationResult = await ValidateBulkRequest(accountId, bulkRequestDto);
             if (!validationResult.IsValid)
             {
-                return BadRequest(validationResult.Errors);
+                return BadRequest(validationResult.Errors.ToArray());
             }
 
             response.RequestId = bulkRequestDto.RequestId;
@@ -337,17 +355,40 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             }
         }
 
-        private class BulkUploadRequestValidationResult
+        public class BulkUploadRequestValidationResult
         {
-            public BulkUploadRequestValidationResult(bool isValid, List<string> errors)
+            public BulkUploadRequestValidationResult(bool isValid, List<ValidationError> errors)
             {
                 IsValid = isValid;
                 Errors = errors;
             }
 
-            public bool IsValid { get; set; }
+            public bool IsValid { get; }
 
-            public List<string> Errors { get; set; }
+            public List<ValidationError> Errors { get; }
+        }
+
+        public class ValidationError
+        {
+            public ValidationError(ErrorEntity entityType, string name, string reason)
+            {
+                EntityType = entityType;
+                Name = name;
+                Reason = reason;
+            }
+
+            public ErrorEntity EntityType { get;  }
+
+            public string Name { get; }
+
+            public string Reason { get; }
+        }
+
+        public enum ErrorEntity
+        {
+            Site,
+            Mpan,
+            Mprn
         }
     }
 }

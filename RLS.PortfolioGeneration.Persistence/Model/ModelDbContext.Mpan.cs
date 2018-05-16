@@ -57,7 +57,10 @@ namespace RLS.PortfolioGeneration.Persistence.Model
 
         private IQueryable<Mpan> RetrieveMpans()
         {
-            return Mpans.AsQueryable().AsNoTracking();
+            return Mpans
+                .Include(mp => mp.Site)
+                .AsQueryable()
+                .AsNoTracking();
         }
     }
 }
