@@ -69,8 +69,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                          from site in Sites
                          join mpan in Mpans on pm.MeterNumber equals mpan.MpanCore
                          join tp in tenancyPeriods on mpan.Site.Id equals tp.SiteId
-                         where tp.EffectiveFrom <= pm.Portfolio.ContractStart
-                               && tp.EffectiveTo >= pm.Portfolio.ContractEnd
+                         where tp.EffectiveFrom <= pm.EffectiveFrom
+                               && tp.EffectiveTo >= pm.EffectiveTo
                          where site.Id == mpan.Site.Id
                          select site)
                 .Include(s => s.Mpans)
@@ -82,8 +82,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     from site in Sites
                     join mprn in Mprns on pm.MeterNumber equals mprn.MprnCore
                     join tp in tenancyPeriods on mprn.Site.Id equals tp.SiteId
-                    where tp.EffectiveFrom <= pm.Portfolio.ContractStart
-                          && tp.EffectiveTo >= pm.Portfolio.ContractEnd
+                    where tp.EffectiveFrom <= pm.EffectiveFrom
+                          && tp.EffectiveTo >= pm.EffectiveTo
                     where site.Id == mprn.Site.Id
                     select site)
                 .Include(s => s.Mpans)
@@ -101,8 +101,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
             return from p in Portfolios.AsQueryable().Include(p => p.PortfolioMeters)
                 where p.Id == portfolioId
                 from pm in p.PortfolioMeters
-                where pm.EffectiveFrom >= p.ContractStart
-                      && pm.EffectiveTo <= p.ContractEnd
                 select pm;
         }
 
