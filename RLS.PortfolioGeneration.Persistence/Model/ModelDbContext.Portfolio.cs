@@ -69,8 +69,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                          from site in Sites
                          join mpan in Mpans on pm.MeterNumber equals mpan.MpanCore
                          join tp in tenancyPeriods on mpan.Site.Id equals tp.SiteId
-                         where tp.EffectiveFrom <= pm.EffectiveFrom
-                               && tp.EffectiveTo >= pm.EffectiveTo
                          where site.Id == mpan.Site.Id
                          select site)
                 .Include(s => s.Mpans)
@@ -82,8 +80,6 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                     from site in Sites
                     join mprn in Mprns on pm.MeterNumber equals mprn.MprnCore
                     join tp in tenancyPeriods on mprn.Site.Id equals tp.SiteId
-                    where tp.EffectiveFrom <= pm.EffectiveFrom
-                          && tp.EffectiveTo >= pm.EffectiveTo
                     where site.Id == mprn.Site.Id
                     select site)
                 .Include(s => s.Mpans)

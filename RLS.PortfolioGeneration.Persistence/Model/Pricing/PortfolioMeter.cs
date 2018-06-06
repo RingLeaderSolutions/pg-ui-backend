@@ -22,6 +22,15 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Pricing
         [Column("meterType")]
         public string MeterType { get; set; }
 
+        [Column("status")]
+        public string Status { get; set; }
+
+        [Column("utility")]
+        public string Utility { get; set; }
+
+        [Column("consumption")]
+        public float Consumption { get; set; }
+
         [ForeignKey("portfolioId")]
         public virtual Portfolio Portfolio { get; set; }
     }
