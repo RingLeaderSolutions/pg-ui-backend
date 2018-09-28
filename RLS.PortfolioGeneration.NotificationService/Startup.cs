@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using RLS.PortfolioGeneration.NotificationService.Repositories;
 using RLS.PortfolioGeneration.NotificationService.SignalR;
-using RLS.PortfolioGeneration.Persistence.Model;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace RLS.PortfolioGeneration.NotificationService
@@ -31,22 +24,25 @@ namespace RLS.PortfolioGeneration.NotificationService
             services.AddCors(service =>
             {
                 service.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                    builder => builder
+                        .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials());
             });
-            services.AddSignalR();
+
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.EnableDetailedErrors = true;
+            });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "TPI Flow Notification Service", Version = "v1" });
             });
-
-
-            services.AddDbContext<ModelDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddSingleton<NotificationMessageRepository>();
+            
+            services.AddSingleton<InMemoryNotificationRepository>();
+            services.Configure<NotificationServiceConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,12 +60,12 @@ namespace RLS.PortfolioGeneration.NotificationService
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TPI Flow Notification Service v1");
             });
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<NotificationServiceHub>("NotificationServiceHub");
+                routes.MapHub<NotificationServiceHub>("/NotificationServiceHub");
             });
         }
     }
