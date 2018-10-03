@@ -15,7 +15,7 @@ using Serilog;
 namespace RLS.PortfolioGeneration.NotificationService.Controllers
 {
     [Route("api/[controller]")]
-    public class NotificationController : Controller
+    public sealed class NotificationController : Controller
     {
         private readonly IHubContext<NotificationServiceHub> _hub;
         private readonly InMemoryNotificationRepository _repository;
@@ -28,12 +28,21 @@ namespace RLS.PortfolioGeneration.NotificationService.Controllers
             _repository = repository;
         }
 
+        /// <summary>
+        /// Retrieve historic notifications from the NotificationService.
+        /// </summary>
+        /// <returns>The last 50 notifications that were sent.</returns>
         [HttpGet]
         public List<NotificationMessage> Get()
         {
             return _repository.GetAll().ToList();
         }
 
+        /// <summary>
+        /// Send a notification to all connected users.
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        /// <returns>200 OK if the message was sent, 400 Bad Request with message if the notification payload was not successfully validated.</returns>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] NotificationMessage message)
         {
