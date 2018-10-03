@@ -27,7 +27,7 @@ namespace RLS.PortfolioGeneration.NotificationService
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
                 .Enrich.FromLogContext()
                 .WriteTo.Debug()
                 .WriteTo.Console()
