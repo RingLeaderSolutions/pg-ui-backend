@@ -17,12 +17,28 @@ namespace RLS.PortfolioGeneration.Persistence.Model
                 await RetrieveAccounts()
                     .ToListAsync();
         }
-
+        
         public async Task<Account> RetrieveAccountById(Guid id)
         {
             return
                 await RetrieveAccounts()
                     .SingleOrDefaultAsync(a => a.Id == id);
+        }
+        
+        public async Task<List<Account>> RetrieveAccountsByName(string name)
+        {
+            return
+                await Accounts
+                    .Where(a => a.CompanyName == name)
+                    .ToListAsync();
+        }
+
+        public async Task<List<Account>> SearchAccountNames(string searchTerm)
+        {
+            return
+                await Accounts
+                    .Where(ac => ac.CompanyName.Contains(searchTerm))
+                    .ToListAsync();
         }
 
         public async Task Add(Account account)
