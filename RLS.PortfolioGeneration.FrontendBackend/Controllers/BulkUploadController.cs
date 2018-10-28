@@ -91,7 +91,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
             if (!Guid.TryParse(bulkRequestDto.AccountId, out var accountId))
             {
-                return BadRequest("AccountId was not in the correct format.");
+                return RespondWithBadRequest("AccountId was not in the correct format.");
             }
 
             using (var dbContext = CreateDbContext())
@@ -99,14 +99,14 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                 var account = await dbContext.RetrieveAccountById(accountId);
                 if (account == null)
                 {
-                    return BadRequest("Specified AccountId does not exist");
+                    return RespondWithBadRequest($"Specified account with id [{accountId.ToString()}] does not exist.");
                 }
             }
 
             var validationResult = await ValidateBulkRequest(accountId, bulkRequestDto);
             if (!validationResult.IsValid)
             {
-                return BadRequest(validationResult.Errors.ToArray());
+                return RespondWithBadRequest("Validation failed", validationResult.Errors.ToArray());
             }
 
             response.RequestId = bulkRequestDto.RequestId;
@@ -353,6 +353,17 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             {
                 property.SetValue(obj, val);
             }
+        }
+
+        private BadRequestObjectResult RespondWithBadRequest(string errorMessage, ValidationError[] errors = null)
+        {
+            var result = new
+            {
+                state = errorMessage,
+                errors = errors ?? new ValidationError[0]
+            };
+
+            return BadRequest(result);
         }
 
         public class BulkUploadRequestValidationResult
