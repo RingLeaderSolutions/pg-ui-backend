@@ -31,7 +31,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         /// </summary>
         /// <returns>All of the accounts.</returns>
         [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(AccountDto), 200)]
         [ProducesResponseType(typeof(List<AccountDto>), 200)]
         [HttpGet]
         public async Task<ActionResult> GetAccounts(
@@ -50,7 +49,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
                 var mappedAccounts = accountsByName.Select(Mapper.Map<AccountDto>)
                     .ToList();
 
-                return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
+                return Ok(mappedAccounts);
             }
 
             // search across accounts
@@ -74,7 +73,6 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         /// <returns>Accounts that match the criteria set in the body</returns>
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(AccountDto), 200)]
         [ProducesResponseType(typeof(List<AccountDto>), 200)]
         [HttpPost("search")]
         public async Task<ActionResult> PostRetrieveAccounts([FromBody]AccountRetrievalRequestDto request)
@@ -98,7 +96,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             var mappedAccounts = accountsByName.Select(Mapper.Map<AccountDto>)
                 .ToList();
 
-            return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
+            return Ok(mappedAccounts);
         }
         
         /// <summary>
