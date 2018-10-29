@@ -67,6 +67,39 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             return Ok(accounts.Select(Mapper.Map<AccountDto>)
                 .ToList());
         }
+
+        /// <summary>
+        /// Retrieves accounts based on the search criteria provided in the request body.
+        /// </summary>
+        /// <returns>Accounts that match the criteria set in the body</returns>
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(AccountDto), 200)]
+        [ProducesResponseType(typeof(List<AccountDto>), 200)]
+        [HttpPost("search")]
+        public async Task<ActionResult> PostRetrieveAccounts([FromBody]AccountRetrievalRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request?.SearchType) || string.IsNullOrWhiteSpace(request.Value))
+            {
+                return BadRequest("Request was not in a valid format.");
+            }
+
+            if (request.SearchType != "name")
+            {
+                return BadRequest("Search type of [{request.SearchType}] is not supported.");
+            }
+            
+            var accountsByName = await _dbContext.RetrieveAccountsByName(request.Value);
+            if (accountsByName.Count == 0)
+            {
+                return NotFound($"No accounts were found with the name [{request.Value}].");
+            }
+
+            var mappedAccounts = accountsByName.Select(Mapper.Map<AccountDto>)
+                .ToList();
+
+            return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
+        }
         
         /// <summary>
         /// Attempts to retrieve an account with the specified id.
@@ -215,6 +248,12 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         {
             await _dbContext.DeleteAccount(id);
             await _reportingService.ReportAccountDeleted(id.ToString());
+        }
+
+        public sealed class AccountRetrievalRequestDto
+        {
+            public string SearchType { get; set; }
+            public string Value { get; set; }
         }
     }
 }
