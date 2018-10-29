@@ -97,7 +97,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             var mappedAccounts = accounts.Select(Mapper.Map<AccountDto>)
                 .ToList();
 
-            return mappedAccounts.Count > 1 ? Ok(mappedAccounts[0]) : Ok(mappedAccounts);
+            return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
         }
 
         /// <summary>

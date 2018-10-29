@@ -75,7 +75,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
                     // If we find a tenancy period matching this site and account, it's valid
                     if (siteTenancyPeriod != null) continue;
-                    errors.Add(new ValidationError(ErrorEntity.Site, siteDto.SiteCode, $"Unable to update Site as it belongs to a different account to the one specified."));
+                    errors.Add(new ValidationError(ErrorEntity.Site, siteDto.SiteCode, "Unable to update Site as no tenancy period relationship exists between the specified account and this site. This usually means it is already linked to another account."));
                     result = false;
                 }
             }
