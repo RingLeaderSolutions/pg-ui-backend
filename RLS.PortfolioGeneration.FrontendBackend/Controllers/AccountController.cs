@@ -30,21 +30,42 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
         /// Retrieves all registered accounts.
         /// </summary>
         /// <returns>All of the accounts.</returns>
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(AccountDto), 200)]
         [ProducesResponseType(typeof(List<AccountDto>), 200)]
         [HttpGet]
-        public async Task<List<AccountDto>> GetAccounts([FromQuery(Name = "search")] string searchTerm = "")
+        public async Task<ActionResult> GetAccounts(
+            [FromQuery(Name = "search")] string searchTerm = "", 
+            [FromQuery(Name = "name")] string name = "")
         {
+            // retrieve accounts by name
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var accountsByName = await _dbContext.RetrieveAccountsByName(name);
+                if (accountsByName.Count == 0)
+                {
+                    return NotFound($"No accounts were found with the name [{name}].");
+                }
+
+                var mappedAccounts = accountsByName.Select(Mapper.Map<AccountDto>)
+                    .ToList();
+
+                return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
+            }
+
+            // search across accounts
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 var results = await _dbContext.SearchAccountNames(searchTerm);
 
-                return results.Select(Mapper.Map<AccountDto>).ToList();
+                return Ok(results.Select(Mapper.Map<AccountDto>).ToList());
             }
             
+            // otherwise, return all accounts
             var accounts = await _dbContext.RetrieveAllAccounts();
 
-            return accounts.Select(Mapper.Map<AccountDto>)
-                .ToList();
+            return Ok(accounts.Select(Mapper.Map<AccountDto>)
+                .ToList());
         }
         
         /// <summary>
@@ -71,35 +92,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
 
             return Ok(Mapper.Map<AccountDto>(account));
         }
-
-        /// <summary>
-        /// Attempts to retrieve account(s) with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the account(s) to retrieve</param>
-        [ProducesResponseType(typeof(AccountDto), 200)]
-        [ProducesResponseType(typeof(AccountDto[]), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(404)]
-        [HttpGet("name/{name}")]
-        public async Task<ActionResult> Get(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return BadRequest();
-            }
-
-            var accounts = await _dbContext.RetrieveAccountsByName(name);
-            if (accounts.Count == 0)
-            {
-                return NotFound();
-            }
-
-            var mappedAccounts = accounts.Select(Mapper.Map<AccountDto>)
-                .ToList();
-
-            return mappedAccounts.Count > 1 ? Ok(mappedAccounts) : Ok(mappedAccounts[0]);
-        }
-
+        
         /// <summary>
         /// Attempts to retrieve the full account tree including its tenancy periods, sites and meters.
         /// </summary>
