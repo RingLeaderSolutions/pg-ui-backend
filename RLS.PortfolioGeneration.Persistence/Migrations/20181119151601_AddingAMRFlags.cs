@@ -8,28 +8,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<float>(
-                name: "consumption",
-                schema: "pricing",
-                table: "portfolio_meter",
-                type: "real",
-                nullable: false,
-                defaultValue: 0f);
-
-            migrationBuilder.AddColumn<string>(
-                name: "status",
-                schema: "pricing",
-                table: "portfolio_meter",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "utility",
-                schema: "pricing",
-                table: "portfolio_meter",
-                type: "nvarchar(max)",
-                nullable: true);
-
             migrationBuilder.AddColumn<bool>(
                 name: "IsAMR",
                 schema: "clients",
@@ -49,21 +27,6 @@ namespace RLS.PortfolioGeneration.Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "consumption",
-                schema: "pricing",
-                table: "portfolio_meter");
-
-            migrationBuilder.DropColumn(
-                name: "status",
-                schema: "pricing",
-                table: "portfolio_meter");
-
-            migrationBuilder.DropColumn(
-                name: "utility",
-                schema: "pricing",
-                table: "portfolio_meter");
-
             migrationBuilder.DropColumn(
                 name: "IsAMR",
                 schema: "clients",
