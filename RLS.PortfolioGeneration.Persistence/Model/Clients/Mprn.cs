@@ -39,6 +39,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public Guid? TariffId { get; set; }
 
+        public bool IsAMR { get; set; }
+
         public virtual Site Site { get; set; }
     }
 }

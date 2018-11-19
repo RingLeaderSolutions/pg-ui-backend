@@ -55,6 +55,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public Guid? TariffId { get; set; }
 
         public bool CCLEligible { get; set; }
+
+        public bool IsAMR { get; set; }
     }
 
     public class MpansDto

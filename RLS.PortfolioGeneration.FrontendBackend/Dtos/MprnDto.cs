@@ -37,6 +37,8 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Dtos
         public string EmergencyContactTelephone { get; set; }
 
         public Guid? TariffId { get; set; }
+
+        public bool IsAMR { get; set; }
     }
 
     public class MprnsDto

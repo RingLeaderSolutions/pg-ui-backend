@@ -284,6 +284,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetPropertyIfNotNull(existing, e => e.Capacity, updatedDto.Capacity);
             SetPropertyIfNotNull(existing, e => e.CCLEligible, updatedDto.CCLEligible);
             SetPropertyIfNotNull(existing, e => e.VATPercentage, updatedDto.VATPercentage);
+            SetPropertyIfNotNull(existing, e => e.IsAMR, updatedDto.IsAMR);
 
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.MeterType, updatedDto.MeterType);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.MeterTimeSwitchCode, updatedDto.MeterTimeSwitchCode);
@@ -314,6 +315,7 @@ namespace RLS.PortfolioGeneration.FrontendBackend.Controllers
             SetPropertyIfNotNull(existing, e => e.Size, updatedDto.Size);
             SetPropertyIfNotNull(existing, e => e.CCLEligible, updatedDto.CCLEligible);
             SetPropertyIfNotNull(existing, e => e.VATPercentage, updatedDto.VATPercentage);
+            SetPropertyIfNotNull(existing, e => e.IsAMR, updatedDto.IsAMR);
 
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.SerialNumber, updatedDto.SerialNumber);
             SetStringPropertyIfNotNullOrEmpty(existing, e => e.Make, updatedDto.Make);

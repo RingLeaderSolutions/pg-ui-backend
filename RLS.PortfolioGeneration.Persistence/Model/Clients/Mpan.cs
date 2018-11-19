@@ -55,6 +55,8 @@ namespace RLS.PortfolioGeneration.Persistence.Model.Clients
 
         public bool CCLEligible { get; set; }
 
+        public bool IsAMR { get; set; }
+
         public Guid? TariffId { get; set; }
 
         public virtual Site Site { get; set; }
